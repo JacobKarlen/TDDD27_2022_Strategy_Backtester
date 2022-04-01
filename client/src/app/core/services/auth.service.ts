@@ -4,8 +4,14 @@ import { Observable } from 'rxjs';
 
 import { User } from 'src/app/shared/models/user';
 
-interface LoginInformation {
+export interface LoginInformation {
   username: string;
+  password: string;
+}
+
+export interface RegisterInformation {
+  username: string;
+  email: string;
   password: string;
 }
 
@@ -18,8 +24,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  register(registerInfo: RegisterInformation): Observable<User> {
+    return this.http.post<User>(this.baseUrl + '/register', registerInfo)
+  }
+
   login(loginInfo: LoginInformation): Observable<User> {
     return this.http.post<User>(this.baseUrl + '/login', loginInfo);
   }
+
+  logout(): Observable<string> {
+    return this.http.delete<string>(this.baseUrl + '/logout');
+  }
+
 
 }
