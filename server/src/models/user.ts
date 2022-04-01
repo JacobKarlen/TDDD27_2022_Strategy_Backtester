@@ -27,7 +27,7 @@ userSchema.pre('save', async function(next) {
 
 userSchema.static('userExists', async function({username, email}): Promise<boolean | Object> {
     try {
-        let user: HydratedDocument<IUser> | null = await User.findOne({}).exec()
+        let user: HydratedDocument<IUser> | null = await User.findOne({ username }).exec()
 
         if (user) return { username: 'This username is already taken' }
     

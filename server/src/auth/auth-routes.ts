@@ -8,7 +8,9 @@ export const authRouter = Router();
 
 authRouter.post('/register', async (req: Request, res: Response) => {
     let userInfo = req.body
+    console.log(req.body)
     let userExists = await User.userExists(userInfo.username, userInfo.email)
+    console.log(userExists)
 
     if (userExists) return res.json(userExists)
 
