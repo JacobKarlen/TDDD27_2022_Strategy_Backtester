@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder } from "@angular/forms";
+import { AuthService } from 'src/app/core/services/auth.service'; 
+import { User } from 'src/app/shared/models/user';
 
 @Component({
   selector: 'app-login-form',
@@ -15,14 +17,18 @@ export class LoginFormComponent implements OnInit {
   })
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.value)
+    this.authService.login(this.loginForm.value).subscribe((user: User) => {
+      console.log(user)
+    })
+
   }
 
 }

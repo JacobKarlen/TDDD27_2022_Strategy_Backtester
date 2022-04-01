@@ -57,7 +57,7 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 });
 
 // Connect routers
-app.use("/", router)
-app.use("/", authRouter)
+app.use("/api/", router)
+app.use("/api/", authRouter)
 
 app.listen(config.port, () =>  console.log(`Express app listening on ${config.port}!`))

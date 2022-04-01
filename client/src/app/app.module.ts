@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthModule } from './modules/auth/auth.module';
+import { CoreModule } from './core/core.module';
 import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { MatCardModule } from '@angular/material/card';
     BrowserAnimationsModule,
     NoopAnimationsModule,
     AuthModule,
+    CoreModule,
     MatCardModule
   ],
   providers: [],
