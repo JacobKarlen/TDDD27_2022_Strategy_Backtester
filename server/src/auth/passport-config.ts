@@ -25,4 +25,5 @@ export function initialize(passport: PassportStatic) {
             done(null, user)
         })
     })
+
 }
