@@ -36,5 +36,18 @@ export class AuthService {
     return this.http.delete<string>(this.baseUrl + '/logout');
   }
 
+  setUserInfo(user: User): void {
+    localStorage.setItem('userInfo', JSON.stringify(user))
+  }
+
+  removeUserInfo(): void {
+    localStorage.removeItem('userInfo')
+  }
+
+  isAuthenticated(): boolean {
+    let userInfo = localStorage.getItem('userInfo')
+    return (userInfo && JSON.parse(userInfo))
+  }
+
 
 }

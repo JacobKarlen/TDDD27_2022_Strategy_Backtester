@@ -1,6 +1,10 @@
 import { Schema, model, Model, HydratedDocument } from "mongoose";
 const bcrypt = require("bcrypt");
 
+export interface SlimUser {
+    username: string,
+    email: string
+}
 
 export interface IUser {
     username: string;
@@ -25,20 +29,25 @@ userSchema.pre('save', async function(next) {
     next()
 })
 
-userSchema.static('userExists', async function({username, email}): Promise<boolean | Object> {
+userSchema.static('userExists', async function(username, email): Promise<boolean | Object> {
     try {
-        let user: HydratedDocument<IUser> | null = await User.findOne({ username }).exec()
+        console.log(username)
 
-        if (user) return { username: 'This username is already taken' }
-    
-        user = await this.findOne({ email })
-        if (user) return { email: 'This email is already taken' }
+        let userByUsername: HydratedDocument<IUser> | null = await User.findOne({ username }).exec()
+        let userByEmail: HydratedDocument<IUser> | null = await this.findOne({ email })
+
+        if (userByUsername && userByEmail) return { // refactor later
+            username: 'This username is already taken.',
+            email: 'This email is already taken.'
+        }
+        if (userByUsername) return { username: 'This username is already taken.' }
+        if (userByEmail) return { email: 'This email is already taken.' }
         
         return false
 
     } catch (e) {
         console.log(e)
-        return { message: 'An error occured'}
+        return { message: 'An error on the server occured'}
     }
    
 })

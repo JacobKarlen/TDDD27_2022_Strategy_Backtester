@@ -9,13 +9,13 @@ export const authRouter = Router();
 
 authRouter.post('/register', async (req: Request, res: Response) => {
     let userInfo = req.body
+
     let message = await User.userExists(userInfo.username, userInfo.email)
     // userExists returns an error message if username/email already in use, false otherwise
-
-    if (message) return res.status(400).json(message)
+    if (message) return res.status(422).json(message)
 
     let savedUser = await (new User(userInfo)).save()
-    res.status(201).json({ "user": savedUser })
+    res.status(201).json(savedUser)
 })
 
 authRouter.post('/login', async(req: Request, res: Response, next: Function) => {
@@ -25,7 +25,7 @@ authRouter.post('/login', async(req: Request, res: Response, next: Function) => 
         
         req.logIn(user, function(error) {
             if (error) return next(error)
-            return res.status(200).json({ "user": user })
+            return res.status(200).json(user)
         })
     })(req, res, next)
 })

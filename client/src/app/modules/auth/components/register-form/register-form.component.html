@@ -6,6 +6,8 @@
         <mat-error *ngIf="username?.invalid && (username?.dirty || username?.touched)">
             <span *ngIf="username?.errors?.['required']">Username is required.</span>
             <span *ngIf="username?.errors?.['minlength']">Username must be at least 4 characters long.</span>
+            <span *ngIf="username?.errors?.['pattern']">Username may only contain alpha-numerical characters.</span>
+            <span *ngIf="username?.errors?.['serverError']">{{ username?.errors?.serverError }}</span>
         </mat-error>
     </mat-form-field>
    
@@ -17,6 +19,7 @@
         <mat-error *ngIf="email?.invalid && (email?.dirty || email?.touched)">
             <span *ngIf="email?.errors?.['required']">Email is required.</span>
             <span *ngIf="email?.errors?.['email']">Must be a valid email address.</span>
+            <span *ngIf="email?.errors?.['serverError']">{{ email?.errors?.serverError }}</span>
         </mat-error>
     </mat-form-field>
 

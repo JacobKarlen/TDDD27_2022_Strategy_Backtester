@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from 'src/app/core/services/auth.service'; 
+import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/shared/models/user';
 
 @Component({
@@ -11,24 +13,55 @@ import { User } from 'src/app/shared/models/user';
 })
 export class LoginFormComponent implements OnInit {
 
-  loginForm = this.formBuilder.group({
-    username: '',
-    password: ''
+  validAuth: boolean = true;
+
+  loginForm = new FormGroup({
+    'username': new FormControl('', [ 
+      Validators.required, 
+      Validators.minLength(4) 
+    ]),
+    'password': new FormControl('', [
+      Validators.required,
+      Validators.minLength(6)
+    ]),
   })
 
   constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    this.authService.login(this.loginForm.value).subscribe((user: User) => {
-      console.log(user)
-    })
+    this.validAuth = this.loginForm.valid
 
+    if (this.validAuth) {
+
+      this.authService.login(this.loginForm.value).subscribe((user: User) => {
+        // successful login
+        this.authService.setUserInfo(user)
+
+        this.userService.getUsers().subscribe((users: User[]) => {
+          console.log(users)
+        })
+
+      }, error => { 
+        // handle login errors
+        if (error instanceof HttpErrorResponse) {
+          const authentificationError = error.error
+  
+          if (error.status === 401) {
+
+            this.loginForm.setErrors({
+              serverError: authentificationError.message
+            })
+      
+          }
+        }
+      })
+    }
   }
 
 }

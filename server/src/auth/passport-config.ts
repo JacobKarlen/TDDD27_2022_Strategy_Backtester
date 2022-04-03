@@ -8,7 +8,7 @@ export function initialize(passport: PassportStatic) {
         User.authenticate(username, password)
             .then((user: IUser | boolean) => {
                 if (user) done(null, user)
-                else done(null, false, { message: 'Incorrect username or password'})
+                else done(null, false, { message: 'Incorrect username or password.'})
             })
             .catch(error => done(error))
 

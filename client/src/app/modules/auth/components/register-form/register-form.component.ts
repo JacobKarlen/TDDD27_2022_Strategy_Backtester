@@ -1,7 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { User } from 'src/app/shared/models/user';
+
+import { ActivatedRoute, Router, RouterModule, ROUTER_INITIALIZER } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -20,7 +23,8 @@ export class RegisterFormComponent implements OnInit {
   registerForm = new FormGroup({
     'username': new FormControl('', [ 
       Validators.required, 
-      Validators.minLength(4) 
+      Validators.minLength(4),
+      Validators.pattern("^[a-zA-Z0-9]*$") 
     ]),
     'email': new FormControl('', [
       Validators.required, 
@@ -37,17 +41,39 @@ export class RegisterFormComponent implements OnInit {
   })
 
   constructor(
-    private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    console.log(this.registerForm.value)
+
     this.authService.register(this.registerForm.value).subscribe((user: User) => {
-      console.log(user)
+      // successful registration
+      this.router.navigate(['login'])
+
+    },  error => { 
+      // handle registration errors
+      if (error instanceof HttpErrorResponse) {
+        const validationErrors = error.error
+
+        if (error.status === 422) {
+      
+          Object.keys(validationErrors).forEach(prop => {
+            // display error messages for each affected form control
+            const formControl = this.registerForm.get(prop)
+    
+            if (formControl) formControl.setErrors({
+              serverError: validationErrors[prop]
+            })
+            
+          })
+        }
+
+      }
     })
 
   }
