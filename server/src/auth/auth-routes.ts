@@ -40,3 +40,4 @@ authRouter.get('/users', checkAuthenticated, (req: Request, res: Response) => {
         res.json(users);
     });
 })
+
