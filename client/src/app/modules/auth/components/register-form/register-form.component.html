@@ -44,4 +44,8 @@
     
     <button [disabled]="!registerForm.valid"
         mat-raised-button color="primary" type="submit">Register</button>  
+
+    <div style="margin-top: 10px;">
+        <a [routerLink]="'/login'">Already have an account? Log in here</a>
+    </div>
 </form>
