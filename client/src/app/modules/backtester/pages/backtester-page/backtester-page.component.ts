@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BorsdataService } from 'src/app/core/services/borsdata.service';
 
 @Component({
   selector: 'app-backtester-page',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BacktesterPageComponent implements OnInit {
 
-  constructor() { }
+  markets: any;
+
+  constructor(private borsdataService: BorsdataService) { }
 
   ngOnInit(): void {
+    this.borsdataService.getMarkets().subscribe((m) => {
+      this.markets = m.markets
+      console.log(this.markets)
+    })
   }
 
 }

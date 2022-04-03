@@ -1,1 +1,6 @@
-<p>backtester-page works!</p>
+<h1>Markets</h1>
+<ul>
+    <li *ngFor="let market of markets">
+        {{market.id}} {{ market.name}} {{market.exchangeName}}
+    </li>
+</ul>

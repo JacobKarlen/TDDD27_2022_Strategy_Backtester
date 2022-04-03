@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { AuthModule } from './modules/auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { MatCardModule } from '@angular/material/card';
+import { BacktesterModule } from './modules/backtester/backtester.module';
 
 @NgModule({
   declarations: [
@@ -23,9 +24,10 @@ import { MatCardModule } from '@angular/material/card';
     NoopAnimationsModule,
     AuthModule,
     CoreModule,
+    BacktesterModule,
     MatCardModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -1,12 +1,14 @@
 import express from "express";
 import { config } from "./config";
-
 import { router } from "./routes/routes";
 import mongoose from "mongoose";
 import passport from "passport";
 import { initialize as initializePassport } from "./auth/passport-config";
 import { authRouter } from "./auth/auth-routes";
 import { User } from "./models/user";
+import { borsdataRouter } from "./routes/borsdata";
+
+require("dotenv")
 
 const flash = require("express-flash");
 const session = require("express-session");
@@ -58,9 +60,9 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 
 });
 
-
 // Connect routers
 app.use("/api/", router)
 app.use("/api/", authRouter)
+app.use("/api/", borsdataRouter)
 
 app.listen(config.port, () =>  console.log(`Express app listening on ${config.port}!`))
