@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { User } from 'src/app/shared/models/user';
 
 import { ActivatedRoute, Router, RouterModule, ROUTER_INITIALIZER } from '@angular/router';
+import { AlertService } from 'src/app/core/services/alert.service';
 
 @Component({
   selector: 'app-register-form',
@@ -43,7 +44,7 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +55,7 @@ export class RegisterFormComponent implements OnInit {
     this.authService.register(this.registerForm.value).subscribe((user: User) => {
       // successful registration
       this.router.navigate(['login'])
+      this.alertService.success("Your account has successfully been created. You can now log in!")
 
     },  error => { 
       // handle registration errors

@@ -20,12 +20,19 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>BackTrader</span>
+
       <div id="auth-button-group">
-        <button mat-button [routerLink]="'/login'">Login</button>
-        <button mat-button [routerLink]="'/register'">Register</button>
+        <div *ngIf="!isLoggedIn()">
+          <button mat-button [routerLink]="'/login'">Log in</button>
+          <button mat-button [routerLink]="'/register'">Register</button>
+        </div> 
+        <div *ngIf="isLoggedIn()">
+          <button mat-button (click)="logout()">Log out</button>
+        </div>
       </div>
     </mat-toolbar>
     <!-- Add Content Here -->
+    <alert></alert>
     <ng-content></ng-content>
 
   </mat-sidenav-content>

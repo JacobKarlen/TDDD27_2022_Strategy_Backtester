@@ -17,3 +17,20 @@ export class AuthGuardService implements CanActivate {
     return false;
   }
 }	
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LoggedInGuardSerivce implements CanActivate {
+
+  constructor(private authService : AuthService, private route : Router) { }
+
+  canActivate(){
+    if(!this.authService.isAuthenticated()){
+      return true;
+    }
+    this.route.navigate(['backtester']);
+    return false;
+  }
+
+}

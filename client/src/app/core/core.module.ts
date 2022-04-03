@@ -11,10 +11,12 @@ import { MatListModule } from '@angular/material/list';
 import { NavbarComponent } from './header/navbar/navbar.component';
 
 import { RouterModule } from '@angular/router';
+import { AlertComponent } from './header/alert/alert.component';
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { RouterModule } from '@angular/router';
     MatListModule
   ],
   exports: [
-    NavbarComponent
+    NavbarComponent,
+    AlertComponent
   ],
   providers: [
     {

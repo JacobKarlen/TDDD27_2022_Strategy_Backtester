@@ -2,6 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router } from '@angular/router';
+import { AlertService } from 'src/app/core/services/alert.service';
 import { AuthService } from 'src/app/core/services/auth.service'; 
 import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/shared/models/user';
@@ -28,7 +30,8 @@ export class LoginFormComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private alertService: AlertService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -42,10 +45,8 @@ export class LoginFormComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe((user: User) => {
         // successful login
         this.authService.setUserInfo(user)
-
-        this.userService.getUsers().subscribe((users: User[]) => {
-          console.log(users)
-        })
+        this.router.navigate(['backtester'])
+        this.alertService.success("You are now logged in!")
 
       }, error => { 
         // handle login errors
