@@ -14,8 +14,8 @@ export class BacktesterPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.borsdataService.getMarkets().subscribe((m) => {
-      this.markets = m.markets
-      console.log(this.markets)
+      // filter out unapplicable markets, keep nordic markets
+      this.markets = m.markets.filter((obj: any) => { return obj.countryId <= 4 })
     })
   }
 

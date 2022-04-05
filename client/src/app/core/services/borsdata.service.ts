@@ -16,4 +16,18 @@ export class BorsdataService {
     return this.http.get<any>(this.baseUrl + '/markets');
   }
 
+  getCountries(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + '/countries');
+  }
+
+  getSectors(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + '/sectors');
+  }
+
+  getBranches(): Observable<any> {
+    return this.http.get<any>(this.baseUrl + '/branches');
+  }
+
+
+
 }

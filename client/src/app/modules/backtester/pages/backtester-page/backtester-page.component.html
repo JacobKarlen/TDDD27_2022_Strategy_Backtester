@@ -1,6 +1,4 @@
-<h1>Markets</h1>
-<ul>
-    <li *ngFor="let market of markets">
-        {{market.id}} {{ market.name}} {{market.exchangeName}}
-    </li>
-</ul>
+<mat-card>
+    <h1>Backtester Strategy Builder</h1>
+    <app-backtester-form [markets]="markets"></app-backtester-form>
+</mat-card>

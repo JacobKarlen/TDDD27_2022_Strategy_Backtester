@@ -1,0 +1,29 @@
+<form [formGroup]="backtesterForm" (ngSubmit)="onSubmit()">  
+
+    <mat-form-field appearance="fill">
+        <mat-label>Start-date</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>End-date</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Markets</mat-label>
+        <mat-select #marketsSelect formControlName="marketsSelect" multiple>
+            <div class="select-all-markets">
+                <mat-checkbox [(ngModel)]="allMarketsSelected"
+                                [ngModelOptions]="{standalone: true}"
+                                (change)="toggleAllMarketsSelection()">Select All</mat-checkbox>
+            </div>
+            <mat-option (click)="marketOptionClicked()" *ngFor="let market of markets" [value]="market['name']">{{market['name']}}, {{market['exchangeName']}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+   
+</form>
