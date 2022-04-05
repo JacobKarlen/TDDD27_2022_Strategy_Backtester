@@ -14,16 +14,21 @@
         <mat-datepicker #endDatePicker></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
-        <mat-label>Markets</mat-label>
-        <mat-select #marketsSelect formControlName="marketsSelect" multiple>
-            <div class="select-all-markets">
-                <mat-checkbox [(ngModel)]="allMarketsSelected"
-                                [ngModelOptions]="{standalone: true}"
-                                (change)="toggleAllMarketsSelection()">Select All</mat-checkbox>
-            </div>
-            <mat-option (click)="marketOptionClicked()" *ngFor="let market of markets" [value]="market['name']">{{market['name']}}, {{market['exchangeName']}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-   
+    <!-- multiple-select includes form-field and label -->
+    <multiple-select
+        [formGroup]="backtesterForm" 
+        [controlName]="'countrySelect'"
+        [label]="'Countries'" 
+        [values]="countries" 
+        [options]="countryOptions">
+    </multiple-select>
+
+    <multiple-select 
+        [formGroup]="backtesterForm" 
+        [controlName]="'marketSelect'" 
+        [label]="'Markets'"
+        [values]="markets" 
+        [options]="marketsOptions">
+    </multiple-select>
+
 </form>

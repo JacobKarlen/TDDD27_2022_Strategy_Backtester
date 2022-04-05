@@ -1,0 +1,12 @@
+<mat-form-field  [formGroup]="formGroup" appearance="fill">
+    <mat-label>{{label}}</mat-label>
+
+    <mat-select #select [formControlName]="controlName" multiple>
+        <div class="select-all">
+            <mat-checkbox [(ngModel)]="allSelected"
+                            [ngModelOptions]="{standalone: true}"
+                            (change)="toggleAllSelection()">Select All</mat-checkbox>
+        </div>
+        <mat-option (click)="optionClicked()" *ngFor="let option of options; let i = index" [value]="values[i]">{{ option }}</mat-option>
+    </mat-select>
+</mat-form-field>

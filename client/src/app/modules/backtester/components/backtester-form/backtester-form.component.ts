@@ -1,5 +1,5 @@
 import { isNgTemplate } from '@angular/compiler';
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
@@ -11,43 +11,33 @@ import { MatSelect } from '@angular/material/select';
 })
 export class BacktesterFormComponent implements OnInit {
   @Input() markets = [];
-  @ViewChild('marketsSelect') marketsSelect: MatSelect;
+  @Input() countries = [];
   
-  allMarketsSelected: boolean = false;
-
+  marketsOptions: string[] = [];
+  countryOptions: string[] = [];
+ 
   backtesterForm = new FormGroup({
-    'username': new FormControl('', [ 
-      Validators.required, 
-      Validators.minLength(4),
-      Validators.pattern("^[a-zA-Z0-9]*$") 
+    'marketSelect': new FormControl('', [ 
+    
     ]),
+    'countrySelect': new FormControl('', [])
   })
-
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  onSubmit() {
-    console.log("in submit function")
-  }
-
-  toggleAllMarketsSelection() {
-    if (this.allMarketsSelected) {
-      this.marketsSelect.options.forEach((opt: MatOption) => opt.select());
-    } else {
-      this.marketsSelect.options.forEach((opt: MatOption) => opt.deselect());
+  ngOnChanges(changes: any): void {
+    // might refactor later or move borsdata service call
+    if (changes.markets) {
+      this.marketsOptions = this.markets.map((m:any) => (m.name +", "+ m.exchangeName))          
     }
+    if (changes.countries) {
+      this.countryOptions = this.countries.map((c:any) => c.name)
+    }
+
   }
-  marketOptionClicked() {
-    let hasChanged = true;
-    this.marketsSelect.options.forEach((opt: MatOption) => {
-      if (!opt.selected) {
-        hasChanged = false;
-      }
-    })
-    this.allMarketsSelected = hasChanged
-  }
+
+  onSubmit() { }
 
 }

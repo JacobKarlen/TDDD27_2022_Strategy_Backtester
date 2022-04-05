@@ -9,6 +9,8 @@ import { BorsdataService } from 'src/app/core/services/borsdata.service';
 export class BacktesterPageComponent implements OnInit {
 
   markets: any;
+  countries: any;
+
 
   constructor(private borsdataService: BorsdataService) { }
 
@@ -16,6 +18,9 @@ export class BacktesterPageComponent implements OnInit {
     this.borsdataService.getMarkets().subscribe((m) => {
       // filter out unapplicable markets, keep nordic markets
       this.markets = m.markets.filter((obj: any) => { return obj.countryId <= 4 })
+    })
+    this.borsdataService.getCountries().subscribe((c) => {
+      this.countries = c.countries
     })
   }
 

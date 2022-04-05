@@ -12,11 +12,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MultipleSelectComponent } from './components/multiple-select/multiple-select.component';
 
 @NgModule({
   declarations: [
     BacktesterPageComponent,
     BacktesterFormComponent,
+    MultipleSelectComponent,
   ],
   imports: [
     CommonModule,
