@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Branches, Countries, Markets, Sectors } from 'src/app/shared/models/borsdata';
 import { User } from 'src/app/shared/models/user';
 
 @Injectable({
@@ -12,20 +13,20 @@ export class BorsdataService {
 
   constructor(private http: HttpClient) { }
 
-  getMarkets(): Observable<any> {
-    return this.http.get<any>(this.baseUrl + '/markets');
+  getMarkets(): Observable<Markets> {
+    return this.http.get<Markets>(this.baseUrl + '/markets');
   }
 
-  getCountries(): Observable<any> {
-    return this.http.get<any>(this.baseUrl + '/countries');
+  getCountries(): Observable<Countries> {
+    return this.http.get<Countries>(this.baseUrl + '/countries');
   }
 
-  getSectors(): Observable<any> {
-    return this.http.get<any>(this.baseUrl + '/sectors');
+  getSectors(): Observable<Sectors> {
+    return this.http.get<Sectors>(this.baseUrl + '/sectors');
   }
 
-  getBranches(): Observable<any> {
-    return this.http.get<any>(this.baseUrl + '/branches');
+  getBranches(): Observable<Branches> {
+    return this.http.get<Branches>(this.baseUrl + '/branches');
   }
 
 

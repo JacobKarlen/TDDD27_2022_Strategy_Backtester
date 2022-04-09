@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControlName, FormGroup } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
@@ -14,6 +14,7 @@ export class MultipleSelectComponent implements OnInit {
   @Input() label: string = '';
   @Input() values: object[] = [];
   @Input() options: string[] = [];
+  @Input() activeOptions: string[] = [];
   @ViewChild('select') select!: MatSelect;
 
   allSelected: boolean = false;
@@ -25,7 +26,9 @@ export class MultipleSelectComponent implements OnInit {
   toggleAllSelection() {
     // toggle all selection, activated with separate checkbox
     if (this.allSelected) {
-      this.select.options.forEach((opt: MatOption) => opt.select());
+      this.select.options.forEach((opt: MatOption) => {      
+          opt.select() 
+      });
     } else {
       this.select.options.forEach((opt: MatOption) => opt.deselect());
     }
@@ -39,6 +42,10 @@ export class MultipleSelectComponent implements OnInit {
       }
     })
     this.allSelected = hasChanged
+  }
+  
+  isDisabled(option: string) {
+    return !this.activeOptions.includes(option)
   }
 
 }

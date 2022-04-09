@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BorsdataService } from 'src/app/core/services/borsdata.service';
+import { Branches, Countries, Country, Market, Markets, Sectors } from 'src/app/shared/models/borsdata';
 
 @Component({
   selector: 'app-backtester-page',
@@ -8,19 +9,29 @@ import { BorsdataService } from 'src/app/core/services/borsdata.service';
 })
 export class BacktesterPageComponent implements OnInit {
 
-  markets: any;
-  countries: any;
+  markets!: Markets;
+  countries!: Countries;
+  sectors!: Sectors;
+  branches!: Branches;
 
 
-  constructor(private borsdataService: BorsdataService) { }
+  constructor(private borsdataService: BorsdataService) {
+    this.markets = []
+  }
 
   ngOnInit(): void {
-    this.borsdataService.getMarkets().subscribe((m) => {
+    this.borsdataService.getMarkets().subscribe((markets: Markets) => {
       // filter out unapplicable markets, keep nordic markets
-      this.markets = m.markets.filter((obj: any) => { return obj.countryId <= 4 })
+      this.markets = markets.filter((obj: any) => { return obj.countryId <= 4 })
     })
-    this.borsdataService.getCountries().subscribe((c) => {
-      this.countries = c.countries
+    this.borsdataService.getCountries().subscribe((countries: Countries) => {
+      this.countries = countries
+    })
+    this.borsdataService.getSectors().subscribe((sectors: Sectors) => {
+      this.sectors = sectors
+    })
+    this.borsdataService.getBranches().subscribe((branches: Branches) => {
+      this.branches = branches
     })
   }
 

@@ -1,34 +1,57 @@
 <form [formGroup]="backtesterForm" (ngSubmit)="onSubmit()">  
 
-    <mat-form-field appearance="fill">
-        <mat-label>Start-date</mat-label>
-        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
-        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #startDatePicker></mat-datepicker>
-    </mat-form-field>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Start-date</mat-label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+    
+        <mat-form-field appearance="fill">
+            <mat-label>End-date</mat-label>
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+   
+    <div>
+        <!-- multiple-select includes form-field and label -->
+        <multiple-select
+            [formGroup]="backtesterForm" 
+            [controlName]="'countrySelect'"
+            [label]="'Countries'" 
+            [values]="countries" 
+            [options]="countryOptions">
+        </multiple-select>
 
-    <mat-form-field appearance="fill">
-        <mat-label>End-date</mat-label>
-        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate">
-        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #endDatePicker></mat-datepicker>
-    </mat-form-field>
+        <multiple-select 
+            [formGroup]="backtesterForm" 
+            [controlName]="'marketSelect'" 
+            [label]="'Markets'"
+            [values]="markets" 
+            [options]="marketsOptions">
+        </multiple-select>
+    </div>
+   
+    <div>
+        <multiple-select 
+            [formGroup]="backtesterForm" 
+            [controlName]="'sectorSelect'" 
+            [label]="'Sectors'"
+            [values]="sectors" 
+            [options]="sectorsOptions"
+            [activeOptions]="sectorsOptions">
+        </multiple-select>
 
-    <!-- multiple-select includes form-field and label -->
-    <multiple-select
-        [formGroup]="backtesterForm" 
-        [controlName]="'countrySelect'"
-        [label]="'Countries'" 
-        [values]="countries" 
-        [options]="countryOptions">
-    </multiple-select>
-
-    <multiple-select 
-        [formGroup]="backtesterForm" 
-        [controlName]="'marketSelect'" 
-        [label]="'Markets'"
-        [values]="markets" 
-        [options]="marketsOptions">
-    </multiple-select>
+        <multiple-select 
+            [formGroup]="backtesterForm" 
+            [controlName]="'branchesSelect'" 
+            [label]="'Branches'"
+            [values]="branches" 
+            [options]="branchesOptions">
+        </multiple-select>   
+    </div>
 
 </form>
