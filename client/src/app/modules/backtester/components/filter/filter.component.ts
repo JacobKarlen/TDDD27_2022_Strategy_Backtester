@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { subscribeOn } from 'rxjs/operators';
 
@@ -18,6 +18,8 @@ interface Scope {
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
+  @Input() filterNumber!: number;
+  @Output() filterDeleteEvent = new EventEmitter<number>()
 
   math = create(all, {})
   scope: Scope = {
@@ -65,7 +67,10 @@ export class FilterComponent implements OnInit {
   ngOnInit(): void {
     // add kpi abbreviations to math scope
     kpis.slice(0, 29).forEach((kpi: any) => { this.scope[kpi.abbreviation] = 10 })
+  }
 
+  deleteFilter() {
+    this.filterDeleteEvent.emit(this.filterNumber)
   }
 
   get formula() { return this.filterForm.get('formula') }

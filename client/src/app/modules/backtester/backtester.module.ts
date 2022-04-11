@@ -19,6 +19,8 @@ import { MatChipsModule } from '@angular/material/chips'
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { KPISelectorModalComponent } from './components/kpiselector-modal/kpiselector-modal.component'
 import { MatDialogModule } from '@angular/material/dialog';
+import { FilterListComponent } from './components/filter-list/filter-list.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MultipleSelectComponent,
     FilterComponent,
     KPISelectorModalComponent,
+    FilterListComponent,
   ],
   imports: [
     CommonModule,
@@ -42,7 +45,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCheckboxModule,
     MatChipsModule,
     DragDropModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ],
   providers: [
     MatDatepickerModule

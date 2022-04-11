@@ -1,0 +1,14 @@
+<div  id="title-wrapper">
+    <h1>Filters</h1>
+    <button 
+        id="add-filter-button"
+        (click)="addFilter()"
+        mat-button mat-raised-button color="primary">
+        Add Filter
+    </button>
+</div>
+<div id="filter-list" cdkDropList (cdkDropListDropped)="drop($event)">
+    <div class="filter-div" *ngFor="let filter of filters" cdkDrag>
+        <app-filter (filterDeleteEvent)="deleteFilter($event)" [filterNumber]="filter"></app-filter>
+    </div>       
+</div>

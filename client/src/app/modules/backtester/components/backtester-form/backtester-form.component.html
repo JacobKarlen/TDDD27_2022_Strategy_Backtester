@@ -85,15 +85,6 @@
         </multiple-select>   
     </div>
 
-    <div>
-        <h1 style="display: inline;">Filters</h1>
-        <button style="float:right;" mat-button mat-raised-button color="primary">Add Filter</button>
-    </div>
-    <div id="filter-list" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div class="filter-div" *ngFor="let filter of filters" cdkDrag>
-            <app-filter></app-filter>
-        </div>
-        
-    </div>
+    <app-filter-list></app-filter-list>
    
 </form>

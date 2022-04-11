@@ -1,5 +1,12 @@
 <mat-card id="filter-card">
-    <mat-card-title>Filter</mat-card-title>
+    <div style="display: inline;">
+        <mat-card-title>Filter
+            <a id="close-button" (click)="deleteFilter()">
+                <mat-icon>close</mat-icon>
+            </a>
+        </mat-card-title>
+    </div>
+   
     <form [formGroup]="filterForm">
         <div>
             <mat-form-field appearance="fill">
