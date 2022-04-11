@@ -1,4 +1,4 @@
-<form [formGroup]="backtesterForm" (ngSubmit)="onSubmit()">  
+<form [formGroup]="backtesterForm" (ngSubmit)="startBacktest()">  
 
     <div>
         <mat-form-field appearance="fill">
@@ -85,6 +85,10 @@
         </multiple-select>   
     </div>
 
-    <app-filter-list></app-filter-list>
+    <app-filter-list 
+        #filterList
+        (filterOrderEvent)="setFilterOrder($event)"> 
+    </app-filter-list>
    
+    <button mat-raised-button color="primary" submit>Start Backtest</button>
 </form>

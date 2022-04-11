@@ -20,15 +20,16 @@ interface Scope {
 export class FilterComponent implements OnInit {
   @Input() filterNumber!: number;
   @Output() filterDeleteEvent = new EventEmitter<number>()
-
+    
   math = create(all, {})
-  scope: Scope = {
+  scope: Scope = { // scope used to evaluate filter formulas
     'RANK': function(val: number) {
       return val
     }
   } 
 
   FormulaValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    // validate filter formula based on kpis and functions in scope
     let formula = control.parent?.get('formula')?.value
     try {
       return this.math.evaluate(formula, this.scope) != NaN ? null : { formulaError: "invalid filter formula." }
@@ -37,8 +38,14 @@ export class FilterComponent implements OnInit {
     }
   }
 
+  constructor(public dialog: MatDialog) { }
 
-  filterForm = new FormGroup({
+  ngOnInit(): void {
+    // add kpi abbreviations to math scope
+    kpis.slice(0, 29).forEach((kpi: any) => { this.scope[kpi.abbreviation] = 10 })
+  }
+
+  filterForm: FormGroup = new FormGroup({
     'selectionCriteria': new FormControl('', [ ]),
     'numberOfStocks': new FormControl('', []),
     'minFilterValue': new FormControl('', []),
@@ -46,7 +53,13 @@ export class FilterComponent implements OnInit {
     'formula': new FormControl('', [ this.FormulaValidator ])
   })
 
-  constructor(public dialog: MatDialog) { }
+  getFilterForm(): FormGroup {
+    return this.filterForm
+  }
+
+  getFilterNumber(): number {
+    return this.filterNumber;
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(KPISelectorModalComponent, {
@@ -55,7 +68,7 @@ export class FilterComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((kpiAbbreviation: string) => {
-      console.log('The dialog was closed');
+      // add selected kpi shorthand to formula and give back focus
       this.filterForm.get('formula')?.setValue(
         this.filterForm.get('formula')?.value + kpiAbbreviation
       )
@@ -63,13 +76,7 @@ export class FilterComponent implements OnInit {
     });
   }
 
-
-  ngOnInit(): void {
-    // add kpi abbreviations to math scope
-    kpis.slice(0, 29).forEach((kpi: any) => { this.scope[kpi.abbreviation] = 10 })
-  }
-
-  deleteFilter() {
+  removeFilter() {
     this.filterDeleteEvent.emit(this.filterNumber)
   }
 

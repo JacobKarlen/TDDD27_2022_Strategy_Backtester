@@ -7,8 +7,12 @@
         Add Filter
     </button>
 </div>
-<div id="filter-list" cdkDropList (cdkDropListDropped)="drop($event)">
+<div id="filter-list"  cdkDropList (cdkDropListDropped)="drop($event)">
     <div class="filter-div" *ngFor="let filter of filters" cdkDrag>
-        <app-filter (filterDeleteEvent)="deleteFilter($event)" [filterNumber]="filter"></app-filter>
+        <app-filter 
+            #filter
+            (filterDeleteEvent)="removeFilter($event)" 
+            [filterNumber]="filter">
+        </app-filter>
     </div>       
 </div>

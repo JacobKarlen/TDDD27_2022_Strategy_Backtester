@@ -4,9 +4,8 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { Branch, Branches, Countries, Country, Market, Markets, Sector, Sectors } from 'src/app/shared/models/borsdata';
+import { FilterListComponent } from '../filter-list/filter-list.component';
 import { FilterComponent } from '../filter/filter.component';
-
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-backtester-form',
@@ -19,6 +18,7 @@ export class BacktesterFormComponent implements OnInit {
   @Input() sectors: Sectors = [];
   @Input() branches: Branches = [];
   @ViewChild('marketSelect') marketSelect!: MatSelect;
+  @ViewChild('filterList') filterList!: FilterListComponent;
   
   countryOptions: string[] = [];
   marketsOptions: string[] = [];
@@ -28,12 +28,14 @@ export class BacktesterFormComponent implements OnInit {
   marketGroups: any[] = [];
   allMarketsSelected: boolean = false; 
 
-  filters: number[] = [1];
+  filterOrder: number[] = [];
  
   backtesterForm = new FormGroup({
-    'marketSelect': new FormControl('', [ 
-    
-    ]),
+    'strategyName': new FormControl('', []),
+    'accessSelect': new FormControl('', []),
+    'startDate': new FormControl('', []),
+    'endDate': new FormControl('', []),
+    'marketsSelect': new FormControl('', []),
     'countrySelect': new FormControl('', []),
     'sectorSelect': new FormControl('', []),
     'branchesSelect': new FormControl('', [])
@@ -42,6 +44,8 @@ export class BacktesterFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    // refactor later
+
     this.backtesterForm.get('countrySelect')?.valueChanges.subscribe((countries: Countries) => {
       // update market options based on selected countries
       let cid = countries.map((c: Country) => c.id) 
@@ -63,7 +67,7 @@ export class BacktesterFormComponent implements OnInit {
         })
       })
       this.marketGroups = groups
- 
+
     })
 
     this.backtesterForm.get('sectorSelect')?.valueChanges.subscribe((sectors: Sectors) => {
@@ -74,6 +78,11 @@ export class BacktesterFormComponent implements OnInit {
     })
 
    }
+
+  ngAfterViewInit() {
+    // add filter controls to main formgroup
+    this.backtesterForm.addControl('filters', this.filterList.getFiltersFormGroup())
+  }
 
   ngOnChanges(changes: any): void {
     // delay in when inputs are available, set options when data available
@@ -92,9 +101,6 @@ export class BacktesterFormComponent implements OnInit {
     }
   }
 
-  onSubmit() { }
-
-
   updateMarketOptions(cid: number[]) {
     // still not consistant
     let groups = this.countries.map((c: Country) => ({
@@ -112,7 +118,6 @@ export class BacktesterFormComponent implements OnInit {
     })
     this.marketGroups = groups
   }
-
   
   marketToggleAllSelection() {
     // toggle all selection, activated with separate checkbox
@@ -137,13 +142,14 @@ export class BacktesterFormComponent implements OnInit {
     this.allMarketsSelected = hasChanged
   }
 
-  addFilter() {
-    console.log("add filter")
-    this.filters.push(this.filters.length + 1)
+  setFilterOrder(filterOrder: number[]): void {
+    // used to update filterOrder from filter-list output
+    this.filterOrder = filterOrder;
   }
 
-  drop(event: CdkDragDrop<number[]>) {
-    moveItemInArray(this.filters, event.previousIndex, event.currentIndex);
+  startBacktest(): void { 
+    console.log(this.backtesterForm.value)
+    console.log("Filter order: ", this.filterOrder)
   }
 
 }
