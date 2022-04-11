@@ -2,6 +2,21 @@
 
     <div>
         <mat-form-field appearance="fill">
+            <mat-label>Strategy Name</mat-label>
+            <input matInput formControlName="strategyName">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Access Status</mat-label>
+            <mat-select formControlName="accessSelect">         
+                <mat-option value="public">Public</mat-option> 
+                <mat-option value="private">Private</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div>
+        <mat-form-field appearance="fill">
             <mat-label>Start-date</mat-label>
             <input matInput [matDatepicker]="startDatePicker" formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
@@ -26,13 +41,29 @@
             [options]="countryOptions">
         </multiple-select>
 
-        <multiple-select 
+        <mat-form-field  appearance="fill">
+            <mat-label>Markets</mat-label>
+        
+            <mat-select #marketSelect formControlName="marketsSelect" multiple>
+                <div class="select-all">
+                    <mat-checkbox [(ngModel)]="allMarketsSelected"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="marketToggleAllSelection()">Select All</mat-checkbox>
+                </div>
+                <mat-optgroup *ngFor="let marketGroup of marketGroups" [disabled]="marketGroup.disabled" [label]="marketGroup.name">
+                    <mat-option (click)="marketOptionClicked()" *ngFor="let option of marketGroup.options" [value]="option.value">{{ option.label }}</mat-option>
+                </mat-optgroup>
+                
+            </mat-select>
+        </mat-form-field>
+
+        <!-- <multiple-select 
             [formGroup]="backtesterForm" 
             [controlName]="'marketSelect'" 
             [label]="'Markets'"
             [values]="markets" 
             [options]="marketsOptions">
-        </multiple-select>
+        </multiple-select> -->
     </div>
    
     <div>
@@ -54,4 +85,15 @@
         </multiple-select>   
     </div>
 
+    <div>
+        <h1 style="display: inline;">Filters</h1>
+        <button style="float:right;" mat-button mat-raised-button color="primary">Add Filter</button>
+    </div>
+    <div id="filter-list" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="filter-div" *ngFor="let filter of filters" cdkDrag>
+            <app-filter></app-filter>
+        </div>
+        
+    </div>
+   
 </form>
