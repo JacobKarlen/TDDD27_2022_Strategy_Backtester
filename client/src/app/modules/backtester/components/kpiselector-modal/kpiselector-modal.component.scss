@@ -1,0 +1,21 @@
+.kpi-card {
+    margin-bottom: 5px;
+}
+
+#modal-actions {
+    float: right;
+}
+
+.fixActionRow {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+.spacer {
+    flex-grow: 1;
+}
+
+#close-button { 
+    float: right;
+}

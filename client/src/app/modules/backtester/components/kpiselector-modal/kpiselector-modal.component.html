@@ -1,0 +1,20 @@
+<div class="fixActionRow">
+    <H1 mat-dialog-title>Select KPI</H1>
+    <mat-form-field [formGroup]="searchGroup">
+        <mat-label>Search</mat-label>
+        <input matInput type="text" formControlName="search" />
+    </mat-form-field>  
+    <div mat-dialog-content>  
+        <mat-card class="kpi-card" *ngFor="let kpi of kpis">
+            <b>{{kpi.abbreviation}}:</b> {{kpi.nameEn}}
+            <button
+                [mat-dialog-close]="kpi.abbreviation" 
+                style="float: right; vertical-align: middle;" 
+                mat-raised-button color="primary">Add</button>
+        </mat-card>
+    </div>
+    <div class="spacer"></div>
+    <div id="modal-actions" mat-dialog-actions>
+        <button id="close-button" mat-raised-button color="primary" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

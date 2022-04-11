@@ -1,0 +1,44 @@
+<mat-card id="filter-card">
+    <mat-card-title>Filter</mat-card-title>
+    <form [formGroup]="filterForm">
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Selection Criteria</mat-label>
+                <mat-select formControlName="selectionCriteria">         
+                    <mat-option value="highest">Highest</mat-option> 
+                    <mat-option value="lowest">Lowest</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="fill">
+                <mat-label>Number of stocks</mat-label>
+                <input type="number" matInput formControlName="numberOfStocks">
+            </mat-form-field>
+        </div>
+       
+        <div>
+            <mat-form-field appearance="fill">
+                <mat-label>Formula Min Value</mat-label>
+                <input type="number" matInput formControlName="minFilterValue">
+            </mat-form-field>
+        
+            <mat-form-field appearance="fill">
+                <mat-label>Formula Max Value</mat-label>
+                <input type="number" matInput formControlName="maxFilterValue">
+            </mat-form-field>
+        </div>
+
+        <div>
+            <mat-form-field id="formula-input-field" appearance="fill">
+                <mat-label>Formula</mat-label>
+                <input id="formula-input" oninput="this.value = this.value.toUpperCase()" type="text" matInput formControlName="formula">
+
+                <mat-error *ngIf="formula?.invalid && (formula?.dirty || formula?.touched)">
+                    <span *ngIf="formula?.errors?.['formulaError']">Formula error: {{formula?.errors?.['formulaError']}}</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button (click)="openDialog()" color="primary">Add KPI</button>
+    </form>
+  
+</mat-card>
