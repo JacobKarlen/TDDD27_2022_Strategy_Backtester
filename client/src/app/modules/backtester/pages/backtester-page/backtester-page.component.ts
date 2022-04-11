@@ -9,10 +9,10 @@ import { Branches, Countries, Country, Market, Markets, Sectors } from 'src/app/
 })
 export class BacktesterPageComponent implements OnInit {
 
-  markets!: Markets;
-  countries!: Countries;
-  sectors!: Sectors;
-  branches!: Branches;
+  markets: Markets = [];
+  countries: Countries = [];
+  sectors: Sectors = [];
+  branches: Branches = [];
 
 
   constructor(private borsdataService: BorsdataService) {
@@ -20,19 +20,21 @@ export class BacktesterPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.borsdataService.getMarkets().subscribe((markets: Markets) => {
-      // filter out unapplicable markets, keep nordic markets
-      this.markets = markets.filter((obj: any) => { return obj.countryId <= 4 })
-    })
-    this.borsdataService.getCountries().subscribe((countries: Countries) => {
-      this.countries = countries
-    })
-    this.borsdataService.getSectors().subscribe((sectors: Sectors) => {
-      this.sectors = sectors
-    })
-    this.borsdataService.getBranches().subscribe((branches: Branches) => {
-      this.branches = branches
-    })
+    // commented to avoid unnecessary requests
+
+    // this.borsdataService.getMarkets().subscribe((markets: Markets) => {
+    //   // filter out unapplicable markets, keep nordic markets
+    //   this.markets = markets.filter((m: Market) => { return m.countryId <= 4 })
+    // })
+    // this.borsdataService.getCountries().subscribe((countries: Countries) => {
+    //   this.countries = countries
+    // })
+    // this.borsdataService.getSectors().subscribe((sectors: Sectors) => {
+    //   this.sectors = sectors
+    // })
+    // this.borsdataService.getBranches().subscribe((branches: Branches) => {
+    //   this.branches = branches
+    // })
   }
 
 }

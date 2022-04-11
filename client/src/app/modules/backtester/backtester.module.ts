@@ -13,12 +13,20 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MultipleSelectComponent } from './components/multiple-select/multiple-select.component';
+import { FilterComponent } from './components/filter/filter.component';
+import { MatChipsModule } from '@angular/material/chips'
+
+import { DragDropModule } from "@angular/cdk/drag-drop";
+import { KPISelectorModalComponent } from './components/kpiselector-modal/kpiselector-modal.component'
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
     BacktesterPageComponent,
     BacktesterFormComponent,
     MultipleSelectComponent,
+    FilterComponent,
+    KPISelectorModalComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +39,10 @@ import { MultipleSelectComponent } from './components/multiple-select/multiple-s
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatChipsModule,
+    DragDropModule,
+    MatDialogModule
   ],
   providers: [
     MatDatepickerModule

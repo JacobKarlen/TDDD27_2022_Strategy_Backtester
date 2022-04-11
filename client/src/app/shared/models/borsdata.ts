@@ -25,3 +25,12 @@ export interface Branch {
     sectorId: number;
 }
 export interface Branches extends Array<Branch>{}
+
+export interface KPI {
+    kpiId: number;
+    abbreviation?: string;
+    nameSv: string;
+    nameEn: string;
+    format: string | null;
+    isString: boolean;
+  }
