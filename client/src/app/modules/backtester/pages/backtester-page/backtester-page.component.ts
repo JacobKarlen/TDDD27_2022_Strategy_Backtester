@@ -20,21 +20,21 @@ export class BacktesterPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // commented to avoid unnecessary requests
+    //commented to avoid unnecessary requests
 
-    // this.borsdataService.getMarkets().subscribe((markets: Markets) => {
-    //   // filter out unapplicable markets, keep nordic markets
-    //   this.markets = markets.filter((m: Market) => { return m.countryId <= 4 })
-    // })
-    // this.borsdataService.getCountries().subscribe((countries: Countries) => {
-    //   this.countries = countries
-    // })
-    // this.borsdataService.getSectors().subscribe((sectors: Sectors) => {
-    //   this.sectors = sectors
-    // })
-    // this.borsdataService.getBranches().subscribe((branches: Branches) => {
-    //   this.branches = branches
-    // })
+    this.borsdataService.getMarkets().subscribe((markets: Markets) => {
+      // filter out unapplicable markets, keep nordic markets
+      this.markets = markets.filter((m: Market) => { return m.countryId <= 4 })
+    })
+    this.borsdataService.getCountries().subscribe((countries: Countries) => {
+      this.countries = countries
+    })
+    this.borsdataService.getSectors().subscribe((sectors: Sectors) => {
+      this.sectors = sectors
+    })
+    this.borsdataService.getBranches().subscribe((branches: Branches) => {
+      this.branches = branches
+    })
   }
 
 }

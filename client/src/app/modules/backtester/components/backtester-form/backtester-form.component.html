@@ -8,7 +8,7 @@
 
         <mat-form-field appearance="fill">
             <mat-label>Access Status</mat-label>
-            <mat-select formControlName="accessSelect">         
+            <mat-select formControlName="accessStatus">         
                 <mat-option value="public">Public</mat-option> 
                 <mat-option value="private">Private</mat-option>
             </mat-select>
@@ -30,12 +30,28 @@
             <mat-datepicker #endDatePicker></mat-datepicker>
         </mat-form-field>
     </div>
+
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Transaction Cost (%)</mat-label>
+            <input matInput type="number" formControlName="transactionCost">
+        </mat-form-field>
+    
+        <mat-form-field appearance="fill">
+            <mat-label>Rebalance Frequency</mat-label>
+            <mat-select formControlName="rebalanceFrequency">             
+                <mat-option value="monthly">Monthly</mat-option>
+                <mat-option value="quarterly">Quarterly</mat-option>        
+                <mat-option value="yearly">Yearly</mat-option>                    
+            </mat-select>
+        </mat-form-field>
+    </div>
    
     <div>
         <!-- multiple-select includes form-field and label -->
         <multiple-select
             [formGroup]="backtesterForm" 
-            [controlName]="'countrySelect'"
+            [controlName]="'countries'"
             [label]="'Countries'" 
             [values]="countries" 
             [options]="countryOptions">
@@ -44,7 +60,7 @@
         <mat-form-field  appearance="fill">
             <mat-label>Markets</mat-label>
         
-            <mat-select #marketSelect formControlName="marketsSelect" multiple>
+            <mat-select #marketSelect formControlName="markets" multiple>
                 <div class="select-all">
                     <mat-checkbox [(ngModel)]="allMarketsSelected"
                                     [ngModelOptions]="{standalone: true}"
@@ -69,7 +85,7 @@
     <div>
         <multiple-select 
             [formGroup]="backtesterForm" 
-            [controlName]="'sectorSelect'" 
+            [controlName]="'sectors'" 
             [label]="'Sectors'"
             [values]="sectors" 
             [options]="sectorsOptions"
@@ -78,7 +94,7 @@
 
         <multiple-select 
             [formGroup]="backtesterForm" 
-            [controlName]="'branchesSelect'" 
+            [controlName]="'branches'" 
             [label]="'Branches'"
             [values]="branches" 
             [options]="branchesOptions">

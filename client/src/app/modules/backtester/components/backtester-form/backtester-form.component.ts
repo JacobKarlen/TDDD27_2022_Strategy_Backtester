@@ -3,9 +3,12 @@ import { Component, OnInit, Input, ViewChild, OnChanges } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
+import { BacktesterService } from 'src/app/core/services/backtester.service';
 import { Branch, Branches, Countries, Country, Market, Markets, Sector, Sectors } from 'src/app/shared/models/borsdata';
 import { FilterListComponent } from '../filter-list/filter-list.component';
 import { FilterComponent } from '../filter/filter.component';
+
+import { StrategyMetadata } from 'src/app/shared/models/backtester';
 
 @Component({
   selector: 'app-backtester-form',
@@ -32,21 +35,23 @@ export class BacktesterFormComponent implements OnInit {
  
   backtesterForm = new FormGroup({
     'strategyName': new FormControl('', []),
-    'accessSelect': new FormControl('', []),
+    'accessStatus': new FormControl('', []),
     'startDate': new FormControl('', []),
     'endDate': new FormControl('', []),
-    'marketsSelect': new FormControl('', []),
-    'countrySelect': new FormControl('', []),
-    'sectorSelect': new FormControl('', []),
-    'branchesSelect': new FormControl('', [])
+    'transactionCost': new FormControl('', []),
+    'rebalanceFrequency': new FormControl('', []),
+    'markets': new FormControl('', []),
+    'countries': new FormControl('', []),
+    'sectors': new FormControl('', []),
+    'branches': new FormControl('', [])
   })
 
-  constructor() { }
+  constructor(private backtesterService: BacktesterService) { }
 
   ngOnInit(): void {
     // refactor later
 
-    this.backtesterForm.get('countrySelect')?.valueChanges.subscribe((countries: Countries) => {
+    this.backtesterForm.get('countries')?.valueChanges.subscribe((countries: Countries) => {
       // update market options based on selected countries
       let cid = countries.map((c: Country) => c.id) 
       this.marketsOptions = this.markets.filter(
@@ -70,7 +75,7 @@ export class BacktesterFormComponent implements OnInit {
 
     })
 
-    this.backtesterForm.get('sectorSelect')?.valueChanges.subscribe((sectors: Sectors) => {
+    this.backtesterForm.get('sectors')?.valueChanges.subscribe((sectors: Sectors) => {
 
       let sid = sectors.map((s: Sector) => s.id) 
       this.branchesOptions = this.branches.filter(
@@ -148,8 +153,18 @@ export class BacktesterFormComponent implements OnInit {
   }
 
   startBacktest(): void { 
-    console.log(this.backtesterForm.value)
-    console.log("Filter order: ", this.filterOrder)
+    let formValues = JSON.parse(JSON.stringify(this.backtesterForm.value)); // deep copy
+    formValues.filters = this.filterOrder.map((fn: number) => {
+      // correct for changed filter orders
+      return formValues.filters['filter'+fn]
+    })
+    let strategyMetadata: StrategyMetadata = formValues;
+
+    console.log(strategyMetadata)
+  
+    this.backtesterService.runBacktest(strategyMetadata).subscribe((res: any) => {
+      console.log(res.message)
+    })
   }
 
 }
