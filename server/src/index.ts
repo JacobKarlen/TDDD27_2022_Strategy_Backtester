@@ -7,6 +7,7 @@ import { initialize as initializePassport } from "./auth/passport-config";
 import { authRouter } from "./auth/auth-routes";
 import { User } from "./models/user";
 import { borsdataRouter } from "./routes/borsdata";
+import { backtesterRouter } from "./routes/backtester";
 
 require("dotenv")
 
@@ -64,5 +65,6 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 app.use("/api/", router)
 app.use("/api/", authRouter)
 app.use("/api/", borsdataRouter)
+app.use("/api/", backtesterRouter)
 
 app.listen(config.port, () =>  console.log(`Express app listening on ${config.port}!`))

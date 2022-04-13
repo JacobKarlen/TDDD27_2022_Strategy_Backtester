@@ -25,3 +25,29 @@ export interface Branch {
     sectorId: number;
 }
 export interface Branches extends Array<Branch>{}
+
+export interface KPI {
+    kpiId: number;
+    abbreviation?: string;
+    nameSv: string;
+    nameEn: string;
+    format: string | null;
+    isString: boolean;
+}
+
+export interface Instrument{
+    insId: number;
+    name: string;
+    urlName: string;
+    instrument: number;
+    isin: string;
+    ticker: string;
+    yahoo: string;
+    sectorId: number;
+    marketId: number;
+    branchId: number;
+    countryId: number;
+    listingDate: Date;
+}
+export interface Instruments extends Array<Instrument>{}
+
