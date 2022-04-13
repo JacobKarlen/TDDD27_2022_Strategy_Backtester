@@ -1,6 +1,7 @@
 import { StrategyMetadata } from "../models/backtester";
 import { Branch, Instrument, Instruments, Market } from "../models/borsdata";
 import { getBorsdataData } from "../routes/borsdata";
+import { generateRebalanceSchedule } from "./helpers";
 
 
 /*
@@ -22,6 +23,7 @@ export async function runBacktest(sm: StrategyMetadata) {
         console.log(universe.map((i:Instrument) => i.name))
         console.log(universe.length)    
 
+        console.log(generateRebalanceSchedule(sm.startDate, sm.endDate)[0]);
 
     } catch (e) {
         console.log('Error: ', e)
