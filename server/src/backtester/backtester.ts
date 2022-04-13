@@ -1,10 +1,30 @@
+import { StrategyMetadata } from "../models/backtester";
+import { Branch, Instrument, Instruments, Market } from "../models/borsdata";
+import { getBorsdataData } from "../routes/borsdata";
 
 
 /*
 Test if it is reasonable to perform backtests in node
 */
+export async function runBacktest(sm: StrategyMetadata) {
 
-export function runBacktest(backtestMetadata: any) {
+    try {
+        let data = await getBorsdataData('/instruments')
+        let instruments: Instruments = data.instruments
 
-    console.log(backtestMetadata)
+        let universe = instruments.filter((i: Instrument) => {
+                return (
+                    sm.markets.map((m: Market) => m.id).includes(i.marketId) &&
+                    sm.branches.map((b: Branch) => b.id).includes(i.branchId)
+                )
+            }
+        )
+        console.log(universe.map((i:Instrument) => i.name))
+        console.log(universe.length)    
+
+
+    } catch (e) {
+        console.log('Error: ', e)
+    }  
+
 }

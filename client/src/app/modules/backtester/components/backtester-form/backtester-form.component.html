@@ -73,13 +73,6 @@
             </mat-select>
         </mat-form-field>
 
-        <!-- <multiple-select 
-            [formGroup]="backtesterForm" 
-            [controlName]="'marketSelect'" 
-            [label]="'Markets'"
-            [values]="markets" 
-            [options]="marketsOptions">
-        </multiple-select> -->
     </div>
    
     <div>
@@ -92,13 +85,29 @@
             [activeOptions]="sectorsOptions">
         </multiple-select>
 
-        <multiple-select 
+        <mat-form-field  appearance="fill">
+            <mat-label>Branches</mat-label>
+        
+            <mat-select #branchesSelect formControlName="branches" multiple>
+                <div class="select-all">
+                    <mat-checkbox [(ngModel)]="allBranchesSelected"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (change)="branchesToggleAllSelection()">Select All</mat-checkbox>
+                </div>
+                <mat-optgroup *ngFor="let branchGroup of branchGroups" [disabled]="branchGroup.disabled" [label]="branchGroup.name">
+                    <mat-option (click)="branchOptionClicked()" *ngFor="let option of branchGroup.options" [value]="option.value">{{ option.label }}</mat-option>
+                </mat-optgroup>
+                
+            </mat-select>
+        </mat-form-field>
+
+        <!-- <multiple-select 
             [formGroup]="backtesterForm" 
             [controlName]="'branches'" 
             [label]="'Branches'"
             [values]="branches" 
             [options]="branchesOptions">
-        </multiple-select>   
+        </multiple-select>    -->
     </div>
 
     <app-filter-list 
@@ -107,4 +116,5 @@
     </app-filter-list>
    
     <button mat-raised-button color="primary" submit>Start Backtest</button>
+    <button type="button" (click)="printFormValues()">Test submit</button>
 </form>

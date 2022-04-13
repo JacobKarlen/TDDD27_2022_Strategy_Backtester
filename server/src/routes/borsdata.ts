@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { Branches, Countries, Markets, Sectors } from "models/borsdata";
+import { Branches, Countries, Instruments, Markets, Sectors } from "models/borsdata";
 const https = require('https')
 import { config } from "../config";
 require("dotenv").config({ path: "../../.env" })
@@ -10,7 +10,7 @@ const API_BASE_URI = 'https://apiservice.borsdata.se/v1'
 
 // potential TODO: refactor using middleware
 
-const getBorsdataData = async (path: string): Promise<any> => {
+export const getBorsdataData = async (path: string): Promise<any> => {
     // async function for fetching data from borsdata api
     const API_KEY = process.env.BORSDATA_API_KEY
     let URL = `${API_BASE_URI}${path}?authKey=${API_KEY}`
@@ -74,3 +74,27 @@ borsdataRouter.get('/borsdata/sectors', async (req: Request, res: Response) => {
         res.status(503).json({ "message": "error with 3rd party service"})
     }  
  })
+
+ borsdataRouter.get('/borsdata/branches', async (req: Request, res: Response) => {
+    try {
+        let data = await getBorsdataData('/branches')
+        let branches: Branches = data.branches
+        res.status(200).json(branches)
+    } catch (e) {
+        console.log('Error: ', e)
+        res.status(503).json({ "message": "error with 3rd party service"})
+    }  
+ })
+
+ borsdataRouter.get('/borsdata/instruments', async (req: Request, res: Response) => {
+    try {
+        let data = await getBorsdataData('/instruments')
+        let instruments: Instruments = data.instruments
+        res.status(200).json(instruments)
+    } catch (e) {
+        console.log('Error: ', e)
+        res.status(503).json({ "message": "error with 3rd party service"})
+    }  
+ })
+
+
