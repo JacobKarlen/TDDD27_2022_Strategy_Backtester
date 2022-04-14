@@ -36,6 +36,8 @@ The Node + Express combination of the first server was mainly chosen because of 
 
 The python server (server 2) was first not part of the vision, but I think it is needed to make the system more realistic (even though it won't be deployed). The request limits of the Borsdata API will be the bottleneck of the system, and to manage all the requests for a typical backtest will take serveral minutes. To not tie up resources on the main node server, the idea is to use a separate task server for longer tasks to run the actual backtests. The main node server will forward the backtest details that the user have inputed in the front-end (stock market universe, filter definitions, etc.) in json to the task server and when the backtests are completed the task server will make a post request back to the node server with the strategy backtest results that can be stored in the database. Since the Borsdata API will act as a bottleneck, backtests won't be able to run in parallel and some form of queue would probably be needed to manage backtests, but not sure how complicated this would be to implement. Another potential motivator behind using python for the backtester is that pandas and other libraries suitable for working with large amounts of financial data can be used.
 
+**Reminder for later: mathjspy for formula evaluation on python backend - https://mathjspy.readthedocs.io/en/latest/**
+
 ## Run Development Environment
 docker-compose command to start the development environment
 
