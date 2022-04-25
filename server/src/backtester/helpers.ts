@@ -1,14 +1,5 @@
 import { trading_dates } from "../data/trading_dates";
-
-interface MonthlyRebalance {
-    month: string;
-    date: string;
-}
-interface YearlyRebalance {
-    year: string;
-    months: MonthlyRebalance[]
-}
-interface RebalanceSchedule extends Array<YearlyRebalance> {}
+import { RebalanceSchedule, YearlyRebalance, MonthlyRebalance } from "../models/backtester";
 
 export function generateRebalanceSchedule(startDate: Date, endDate: Date): RebalanceSchedule {
 

@@ -1,5 +1,13 @@
 import { Countries, Markets, Sectors, Branches } from "./borsdata"
 
+export interface Filter {
+    numberOfStocks: number;
+    selectionCriteria: String;
+    maxFilterValue: number;
+    minFilterValue: number;
+    formula: String;
+}
+
 export interface StrategyMetadata {
     strategyName: String; 
     accessStatus: String;
@@ -16,13 +24,17 @@ export interface StrategyMetadata {
     sectors: Sectors;
     branches: Branches;
  
-    filters: [
-        {          
-            numberOfStocks: number;
-            selectionCriteria: String;
-            maxFilterValue: number;
-            minFilterValue: number;
-            formula: String;
-        }
-    ]
+    filters: Filter[]
 }
+
+
+
+export interface MonthlyRebalance {
+    month: string;
+    date: string;
+}
+export interface YearlyRebalance {
+    year: string;
+    months: MonthlyRebalance[]
+}
+export interface RebalanceSchedule extends Array<YearlyRebalance> {}

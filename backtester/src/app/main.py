@@ -1,7 +1,13 @@
 from fastapi import FastAPI
+import backtester.backtester as backtester
 
-app = FastAPI()
+app = FastAPI(debug=True)
+
+@app.get("/backtester")
+def read_backtester():
+    print("in python backtester")
+    return { "message": backtester.getBacktestResult() }
 
 @app.get("/")
 def read_root():
-    return { "message": "In python backtester api" }
+    return { "message": "in root route" }
