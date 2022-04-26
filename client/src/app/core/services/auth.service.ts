@@ -40,6 +40,11 @@ export class AuthService {
     localStorage.setItem('userInfo', JSON.stringify(user))
   }
 
+  getUserInfo(): User {
+    let ui = localStorage.getItem('userInfo')
+    return ui ? JSON.parse(ui) : null
+  }
+
   removeUserInfo(): void {
     localStorage.removeItem('userInfo')
   }
