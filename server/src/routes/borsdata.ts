@@ -75,26 +75,5 @@ borsdataRouter.get('/borsdata/sectors', async (req: Request, res: Response) => {
     }  
  })
 
- borsdataRouter.get('/borsdata/branches', async (req: Request, res: Response) => {
-    try {
-        let data = await getBorsdataData('/branches')
-        let branches: Branches = data.branches
-        res.status(200).json(branches)
-    } catch (e) {
-        console.log('Error: ', e)
-        res.status(503).json({ "message": "error with 3rd party service"})
-    }  
- })
-
- borsdataRouter.get('/borsdata/instruments', async (req: Request, res: Response) => {
-    try {
-        let data = await getBorsdataData('/instruments')
-        let instruments: Instruments = data.instruments
-        res.status(200).json(instruments)
-    } catch (e) {
-        console.log('Error: ', e)
-        res.status(503).json({ "message": "error with 3rd party service"})
-    }  
- })
 
 

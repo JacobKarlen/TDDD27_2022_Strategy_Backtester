@@ -6,7 +6,7 @@ app = FastAPI(debug=True)
 @app.get("/backtester")
 def read_backtester():
     print("in python backtester")
-    return { "message": backtester.getBacktestResult() }
+    return { "result": backtester.getBacktestResult() }
 
 @app.get("/")
 def read_root():

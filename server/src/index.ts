@@ -5,9 +5,10 @@ import mongoose from "mongoose";
 import passport from "passport";
 import { initialize as initializePassport } from "./auth/passport-config";
 import { authRouter } from "./auth/auth-routes";
-import { User } from "./models/user";
+import { IUser, User } from "./models/user";
 import { borsdataRouter } from "./routes/borsdata";
 import { backtesterRouter } from "./routes/backtester";
+import { strategyRouter } from "./routes/strategy";
 
 require("dotenv")
 
@@ -16,6 +17,14 @@ const session = require("express-session");
 const bodyParser = require("body-parser")
 
 const MongoStore = require("connect-mongo")
+
+declare global {
+	namespace Express {
+	  interface User {
+		_id: mongoose.Schema.Types.ObjectId
+	  }
+	}
+  }
 
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config() // require syntax to more compactly import env variables
@@ -66,5 +75,6 @@ app.use("/api/", router)
 app.use("/api/", authRouter)
 app.use("/api/", borsdataRouter)
 app.use("/api/", backtesterRouter)
+app.use("/api/", strategyRouter)
 
 app.listen(config.port, () =>  console.log(`Express app listening on ${config.port}!`))

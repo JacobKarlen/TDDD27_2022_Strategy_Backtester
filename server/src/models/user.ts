@@ -1,12 +1,14 @@
-import { Schema, model, Model, HydratedDocument } from "mongoose";
+import { Schema, model, Model, HydratedDocument, Document } from "mongoose";
 const bcrypt = require("bcrypt");
 
-export interface SlimUser {
+export interface SlimUser { 
+    // used
     username: string,
     email: string
 }
 
-export interface IUser {
+export interface IUser extends Document {
+    //_id: Schema.Types.ObjectId | undefined; 
     username: string;
     email: string;
     password: string;
@@ -18,6 +20,7 @@ interface UserModel extends Model<IUser> {
 }
 
 const userSchema = new Schema<IUser, UserModel>({
+    //"_id": { type: Schema.Types.ObjectId || undefined, required: true},
     "username": { type: String , required: true, unique: true },
     "email": { type: String , required: true, unique: true },
     "password": { type: String , required: true },

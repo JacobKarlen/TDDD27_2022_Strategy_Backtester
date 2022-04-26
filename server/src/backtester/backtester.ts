@@ -31,6 +31,7 @@ export async function runBacktest(sm: StrategyMetadata) {
             return k.abbreviation && filterString.indexOf(k.abbreviation) != -1
         })
 
+
         console.log(kpisNeeded)
         let scope = {
             PE: '"'
