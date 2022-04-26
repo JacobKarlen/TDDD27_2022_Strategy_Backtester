@@ -1,0 +1,8 @@
+<mat-card>
+    <h1>Strategies</h1>
+    <mat-card *ngFor="let strategy of strategies">
+        <div><b>Name:</b> {{strategy.metadata.strategyName}} </div>
+        <div><b>Return:</b> {{strategy.result.statistics.totalReturn}}</div>
+        <button type="button">View Strategy</button>
+    </mat-card>
+</mat-card>
