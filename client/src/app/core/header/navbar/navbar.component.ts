@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { User } from 'src/app/shared/models/user';
 
 @Component({
   selector: 'app-navbar',
@@ -24,6 +25,7 @@ export class NavbarComponent {
     private router: Router
     ) {}
 
+
     isLoggedIn(): boolean {
       return this.authService.isAuthenticated()
     }
@@ -33,6 +35,11 @@ export class NavbarComponent {
         this.authService.removeUserInfo()
         this.router.navigate(['login'])
       });
+    }
+
+    get username(): string {
+      let user: User = this.authService.getUserInfo()
+      return user? user.username : "explore"
     }
 
 }

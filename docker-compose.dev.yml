@@ -35,7 +35,7 @@ services:
  backtester:
     build: ./backtester
     ports:
-      - "8040:8040"
+      - "8000:8000"
     volumes:
       - ./backtester/src:/usr/src/app/
     networks:

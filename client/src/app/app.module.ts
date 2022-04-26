@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { MatCardModule } from '@angular/material/card';
 import { BacktesterModule } from './modules/backtester/backtester.module';
+import { StrategyModule } from './modules/strategy/strategy.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { BacktesterModule } from './modules/backtester/backtester.module';
     AuthModule,
     CoreModule,
     BacktesterModule,
+    StrategyModule,
     MatCardModule
   ],
   providers: [],
