@@ -7,25 +7,39 @@ const http = require('http')
 
 export const backtesterRouter = Router();
 
-export const getBacktestResult = async (): Promise<any> => {
+export const getBacktestResult = async (metadata: StrategyMetadata): Promise<any> => {
     // used to request backtester api
     // currently serves fake generated results
     let URL = `http://backtester-api.dev:8000/backtester` 
 
     return new Promise((resolve, reject) => {
-        http.get(URL, (res: any) => {
+        const req = http.request({
+            hostname: 'backtester-api.dev',
+            port: 8000,
+            path: '/backtester',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }, (res: any) => {
             // assemble data chunks into complete response body
             let data = ''
             
             res.on('data', (chunk: string) => { 
-        
-                data += chunk })
+                data += chunk 
+            })
             res.on('end', () => { resolve(JSON.parse(data)) })
             
         }).on('error', (error: Error) => {
             console.log("Error: ", error)
             reject()
         })
+        req.on('error', (error: Error) => {
+            console.error(error)
+        })
+        req.write(JSON.stringify(metadata))
+        req.end()
+        console.log("in getBacktestResult")
     })
    
 }
@@ -35,7 +49,8 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
     // currently gets random backtest result generated from python api
 
     try {
-        let data = await getBacktestResult()
+        let data = await getBacktestResult(strategyMetadata)
+        console.log(data)
         let result: StrategyResult = data.result
 
         let strategy: IStrategy = {
@@ -55,8 +70,3 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
    
 })
 
-backtesterRouter.get('/strategies', checkAuthenticated, (req: Request, res: Response) => {
-    Strategy.find({}, async (err: Error, strategies: HydratedDocument<IStrategy>) => {
-        res.json(strategies);
-    });
-})

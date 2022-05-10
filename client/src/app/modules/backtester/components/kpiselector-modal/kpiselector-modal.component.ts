@@ -13,7 +13,7 @@ import { KPI } from 'src/app/shared/models/borsdata';
 })
 export class KPISelectorModalComponent implements OnInit {
 
-  kpis: KPI[] = kpis.slice(0, 29)
+  kpis: KPI[] = kpis.slice(0, 29) // only first 29 kpis currently have abbreviations
 
   searchGroup = new FormGroup({
     'search': new FormControl('', []),

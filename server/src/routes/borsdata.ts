@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { Branches, Countries, Instruments, Markets, Sectors } from "models/borsdata";
 const https = require('https')
 import { config } from "../config";
+
 require("dotenv").config({ path: "../../.env" })
 
 export const borsdataRouter = Router();

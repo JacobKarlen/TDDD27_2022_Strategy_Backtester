@@ -1,12 +1,14 @@
+from datetime import datetime as dt
 from fastapi import FastAPI
-import backtester.backtester as backtester
+from .backtester import getBacktestResult, run_backtest
+from .models import StrategyMetadata
 
 app = FastAPI(debug=True)
 
-@app.get("/backtester")
-def read_backtester():
-    print("in python backtester")
-    return { "result": backtester.getBacktestResult() }
+@app.post("/backtester")
+def read_backtester(metadata: StrategyMetadata):
+    run_backtest(metadata)
+    return { "result": getBacktestResult() }
 
 @app.get("/")
 def read_root():

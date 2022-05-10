@@ -45,10 +45,10 @@ export class BacktesterFormComponent implements OnInit {
     'endDate': new FormControl('', []),
     'transactionCost': new FormControl('', []),
     'rebalanceFrequency': new FormControl('', []),
-    'markets': new FormControl('', []),
-    'countries': new FormControl('', []),
-    'sectors': new FormControl('', []),
-    'branches': new FormControl('', [])
+    'markets': new FormControl([], []),
+    'countries': new FormControl([], []),
+    'sectors': new FormControl([], []),
+    'branches': new FormControl([], [])
   })
 
   constructor(private backtesterService: BacktesterService) { }
