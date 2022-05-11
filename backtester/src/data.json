@@ -1,0 +1,296 @@
+[
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 1,
+        "nameEn": "Dividend Yield",
+        "nameSv": "Direktavkastning"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 2,
+        "nameEn": "P/E",
+        "nameSv": "P/E"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 3,
+        "nameEn": "P/S",
+        "nameSv": "P/S"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 4,
+        "nameEn": "P/B",
+        "nameSv": "P/B"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 5,
+        "nameEn": "Revenue/share",
+        "nameSv": "Oms\u00e4ttning/Aktie"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 6,
+        "nameEn": "Earnings/share",
+        "nameSv": "Vinst/Aktie"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 7,
+        "nameEn": "Dividend",
+        "nameSv": "Utdelning"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 8,
+        "nameEn": "Book value/share",
+        "nameSv": "Eget Kapital/Aktie"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 9,
+        "nameEn": "P/(E)x",
+        "nameSv": "P/(E)x"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 10,
+        "nameEn": "EV/EBIT",
+        "nameSv": "EV/EBIT"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 11,
+        "nameEn": "EV/EBITDA",
+        "nameSv": "EV/EBITDA"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 12,
+        "nameEn": "EV/E",
+        "nameSv": "EV/E"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 13,
+        "nameEn": "EV/FCF",
+        "nameSv": "EV/FCF"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 15,
+        "nameEn": "EV/S",
+        "nameSv": "EV/S"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 16,
+        "nameEn": "E/EV (%)",
+        "nameSv": "E/EV (%)"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 17,
+        "nameEn": "EBIT/EV (%)",
+        "nameSv": "EBIT/EV (%)"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 18,
+        "nameEn": "P/B-tang",
+        "nameSv": "P/B-tang"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 19,
+        "nameEn": "PEG",
+        "nameSv": "PEG"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 23,
+        "nameEn": "FCF growth",
+        "nameSv": "FCF / Aktie"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 24,
+        "nameEn": "FCF margin%",
+        "nameSv": "FCF Marginal%"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 25,
+        "nameEn": "Capex %",
+        "nameSv": "Capex %"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 26,
+        "nameEn": "Dividend/FCF",
+        "nameSv": "Utdelning/FCF"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 28,
+        "nameEn": "Gross margin",
+        "nameSv": "Bruttomarginal"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 29,
+        "nameEn": "Operating margin",
+        "nameSv": "R\u00f6relsemarginal"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 30,
+        "nameEn": "Profit margin",
+        "nameSv": "Vinstmarginal"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 32,
+        "nameEn": "EBITDA margin",
+        "nameSv": "EBITDA-marginal"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 33,
+        "nameEn": "Return on Equity",
+        "nameSv": "Avkastning P\u00e5 EK"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 34,
+        "nameEn": "Return on Assets",
+        "nameSv": "Avkastning p\u00e5 T"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 39,
+        "nameEn": "Equity ratio",
+        "nameSv": "Soliditet"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 41,
+        "nameEn": "Net Debt",
+        "nameSv": "Nettoskuld"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 46,
+        "nameEn": "Cash-%",
+        "nameSv": "Kassa-%"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 51,
+        "nameEn": "OCF margin",
+        "nameSv": "OP-marginal"
+    },
+    {
+        "format": "MCURR",
+        "isString": false,
+        "kpiId": 54,
+        "nameEn": "EBITDA",
+        "nameSv": "EBITDA"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 68,
+        "nameEn": "Operating Cash Flow/share",
+        "nameSv": "Operativ kassafl\u00f6de/Aktie"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 69,
+        "nameEn": "Cash flow - year/share",
+        "nameSv": "\u00c5rets kassafl\u00f6de/Aktie"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 71,
+        "nameEn": "EBITA/share",
+        "nameSv": "EBITDA/Aktie"
+    },
+    {
+        "format": "CURR",
+        "isString": false,
+        "kpiId": 73,
+        "nameEn": "Net Debt/share",
+        "nameSv": "Nettoskuld/Aktie"
+    },
+    {
+        "format": null,
+        "isString": false,
+        "kpiId": 78,
+        "nameEn": "EV/OCF",
+        "nameSv": "EV/OP"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 92,
+        "nameEn": "Intang.assets-%",
+        "nameSv": "Immat.tillg\u00e5ng.-%"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 93,
+        "nameEn": "Workingcapital-%",
+        "nameSv": "R\u00f6relsekapital-%"
+    },
+    {
+        "format": "MCURR",
+        "isString": false,
+        "kpiId": 137,
+        "nameEn": "Total liabilities",
+        "nameSv": "Totala Skulder"
+    },
+    {
+        "format": "%",
+        "isString": false,
+        "kpiId": 140,
+        "nameEn": "Cash flow - year marginal",
+        "nameSv": "\u00c5rets kassafl\u00f6de marginal"
+    }
+]

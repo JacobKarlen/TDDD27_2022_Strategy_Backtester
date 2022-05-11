@@ -4,32 +4,17 @@ import pandas as pd
 from .models import StrategyMetadata
 import numpy as np
 
+import json
+import functools as ft
 import os
 from dotenv import load_dotenv
+load_dotenv()
 
 import requests
 from http import HTTPStatus
 
-        # let data = await getBorsdataData('/instruments')
-        # let instruments: Instruments = data.instruments
 
-        # let stocks = instruments.filter((i: Instrument) => {
-        #         return (
-        #             sm.markets.map((m: Market) => m.id).includes(i.marketId) &&
-        #             sm.branches.map((b: Branch) => b.id).includes(i.branchId)
-        #         )
-        #     }
-        # )
-        
-        # let filterString: String = sm.filters.map((f: Filter) => f.formula).reduce(
-        #     (s1: String, s2: String): String => s1 + '' + s2)
-
-        # let kpisNeeded = kpis.splice(0, 29).filter((k: KPI) => {
-        #     return k.abbreviation && filterString.indexOf(k.abbreviation) != -1
-        # })
-
-
-def get_instruments(countries, markets, sectors, branches):
+def get_instrument_list(countries, markets, sectors, branches):
     URL = "https://apiservice.borsdata.se/v1/instruments/"
     try:
         res = requests.get(URL, { "authKey": os.getenv('BORSDATA_API_KEY') })
@@ -44,7 +29,49 @@ def get_instruments(countries, markets, sectors, branches):
     except HTTPError:
         return False
 
-load_dotenv()
+def get_kpi_list(filters):
+    formulas = list(map(lambda f: f.get('formula'), filters))
+    formula_str = str(ft.reduce(lambda s1, s2: s1 +''+ s2, formulas))
+    
+    from pathlib import Path
+
+    script_location = Path(__file__).absolute().parent
+    file_location = script_location / 'kpis.json'
+    
+    kpi_file = file_location.open()
+    kpis = json.load(kpi_file)[0:30]
+
+    kpis = list(filter(lambda kpi: kpi.get('abbreviation') and (formula_str.find(kpi.get('abbreviation')) != -1), kpis))
+    
+    print(formula_str)
+    print(kpis)
+    
+def _save_summary_kpis():
+    """
+    Internal function for saving list of available summary KPIs. Abbreviations
+    need to be added manually for added user friendlyness in the formulas.
+    """
+    meta_URL = "https://apiservice.borsdata.se/v1/instruments/kpis/metadata"
+    kpis_URL = "https://apiservice.borsdata.se/v1/instruments/3/kpis/year/summary"
+    try:
+        res = requests.get(kpis_URL, { "authKey": os.getenv('BORSDATA_API_KEY'), "maxCount": 20 })
+        meta_res = requests.get(meta_URL, { "authKey": os.getenv('BORSDATA_API_KEY') })
+        if res.status_code == HTTPStatus.OK:
+            kpis = res.json()['kpis']
+            meta = meta_res.json()['kpiHistoryMetadatas']
+            
+            kpi_ids = list(map(lambda kpi: kpi.get('KpiId'), kpis))
+            kpis = list(filter(lambda kpi: kpi.get('kpiId') in kpi_ids, meta))
+
+            with open('data.json', 'w') as f:
+                json.dump(kpis, f, indent=4, sort_keys=True)
+        else:
+            return False
+    except HTTPError:
+        return False
+
+
+
 
 def getBacktestResult():
     df_data = {} # used for annual statistics
@@ -90,7 +117,12 @@ def getBacktestResult():
     
 
 def run_backtest(md: StrategyMetadata):
-    instruments = get_instruments(md.countries, md.markets, md.sectors, md.branches)
+    instruments = get_instrument_list(md.countries, md.markets, md.sectors, md.branches)
     
     if instruments: print(instruments)
     else: print("nope")
+
+    print(get_kpi_list(md.filters))
+    
+    _save_summary_kpis()
+    
