@@ -59,7 +59,14 @@ def _get_instrument_list(markets, branches):
 
     market_ids = list(map(lambda m: m.get('id'), markets))
     branch_ids = list(map(lambda b: b.get('id'), branches)) 
-    instruments = list(filter(lambda i: i.get('marketId') in market_ids and i.get('branchId') in branch_ids, instruments))
+    instrument_ids = [0, 3] # A and B stock types
+    
+    instruments = list(filter(
+        lambda i: i.get('marketId') in market_ids and 
+            i.get('branchId') in branch_ids and 
+            i.get('instrument') in instrument_ids, 
+        instruments)
+    )
     return instruments
 
     
@@ -93,7 +100,9 @@ def _get_kpis_list_from_filters(filters):
     return kpis
 
 def _get_kpis_summary_for_instruments(instruments):
+    """
     
+    """
     for instrument in instruments:
         kpis_summary = borsdata.fetch_kpis_summary(instrument['insId'])
         #print(pd.DataFrame(kpis_summary))
@@ -102,10 +111,24 @@ def _get_kpis_summary_for_instruments(instruments):
         print(df)
         
 def _get_pricedata_for_instruments(instruments):
-    
+    """
+    Construct a pandas dataframe of aligned pricedata for all instruments
+    in the supplied instrument list (from cached pricedata). 
+    """
+    dfs = []
     for instrument in instruments:
-        print(pd.read_csv(f"./pricedata/{instrument['insId']} {instrument['ticker']}.csv"))
-
+        df = pd.read_csv(f"./pricedata/{instrument['insId']} {instrument['ticker']}.csv")
+        df['ticker'] = instrument['ticker']
+        df['ins_id'] = instrument['insId']
+        dfs.append(df)
+        
+    df = pd.concat(dfs, axis=0)
+    df = df.set_index('date')
+    df.index = pd.to_datetime(df.index)
+    df = df[['ticker', 'ins_id', 'open', 'high', 'low', 'close', 'volume']]
+    df = df.sort_index()
+    
+    return df
 
 def getBacktestResult():
     df_data = {} # used for annual statistics
@@ -153,9 +176,13 @@ def getBacktestResult():
 def run_backtest(md: StrategyMetadata):
     instruments = _get_instrument_list(md.markets, md.branches)
     
+    data = _get_pricedata_for_instruments(instruments)
+    
+    
+    
     _get_kpis_summary_for_instruments(instruments)
     
-    _get_pricedata_for_instruments(instruments)
+    
     
     if instruments:
         #_fetch_summary_kpis(instruments)
