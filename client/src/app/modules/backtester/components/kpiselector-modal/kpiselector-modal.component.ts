@@ -24,7 +24,7 @@ export class KPISelectorModalComponent implements OnInit {
   ngOnInit(): void {
     this.searchGroup.valueChanges.subscribe((control: any) => {
       let term: string = control.search
-      this.kpis = kpis.slice(0, 29).filter((kpi: KPI) => {
+      this.kpis = kpis.filter((kpi: KPI) => {
         return kpi.nameEn.includes(term) || kpi.abbreviation?.includes(term)
       })
     })

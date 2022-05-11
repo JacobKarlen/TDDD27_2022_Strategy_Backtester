@@ -3,74 +3,108 @@ from urllib.error import HTTPError
 import pandas as pd
 from .models import StrategyMetadata
 import numpy as np
+from datetime import datetime as dt
 
+import time
 import json
 import functools as ft
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 load_dotenv()
 
 import requests
 from http import HTTPStatus
 
-
-def get_instrument_list(countries, markets, sectors, branches):
-    URL = "https://apiservice.borsdata.se/v1/instruments/"
-    try:
-        res = requests.get(URL, { "authKey": os.getenv('BORSDATA_API_KEY') })
-        if res.status_code == HTTPStatus.OK:
-            instruments = res.json()['instruments']      
-            market_ids = list(map(lambda m: m.get('id'), markets))
-            branch_ids = list(map(lambda b: b.get('id'), branches)) 
-            instruments = list(filter(lambda i: i.get('marketId') in market_ids and i.get('branchId') in branch_ids, instruments))
-            return instruments
-        else:
+class BorsdataAPI():
+    
+    def __init__(self):
+        self.BASE_URL = 'https://apiservice.borsdata.se/v1'
+        self.API_KEY = os.getenv('BORSDATA_API_KEY')
+        self.req_count = 0
+        
+    def fetch(self, route):
+        if self.req_count % 10 == 0:
+            time.sleep(1)
+        try:
+            self.req_count = self.req_count + 1
+            res = requests.get(f"{self.BASE_URL}{route}", { "authKey": self.API_KEY, "maxCount": 20 })
+        except HTTPError:
+            print("Error with 3rd party Borsdata API")
             return False
-    except HTTPError:
-        return False
+        else:
+            return res.json()
+    
+    def fetch_instruments(self):
+        instruments = self.fetch('/instruments')
+        if instruments: return instruments['instruments'] 
+        else: return []
+    
+    def fetch_kpis_metadata(self):
+        kpis_metadata = self.fetch('/instruments/kpis/metadata')
+        if kpis_metadata: return kpis_metadata['kpiHistoryMetadatas']
+        else: return []
+    
+    def fetch_kpis_summary(self, ins_id):
+        kpis_summary = self.fetch(f"/instruments/{ins_id}/kpis/year/summary")
+        if kpis_summary: return kpis_summary['kpis']
+        else: return []
 
-def get_kpi_list(filters):
-    formulas = list(map(lambda f: f.get('formula'), filters))
-    formula_str = str(ft.reduce(lambda s1, s2: s1 +''+ s2, formulas))
-    
-    from pathlib import Path
+# instantiate borsdata API
+borsdata  = BorsdataAPI()
 
-    script_location = Path(__file__).absolute().parent
-    file_location = script_location / 'kpis.json'
-    
-    kpi_file = file_location.open()
-    kpis = json.load(kpi_file)[0:30]
+def _get_instrument_list(markets, branches):
+    instruments = borsdata.fetch_instruments()
 
-    kpis = list(filter(lambda kpi: kpi.get('abbreviation') and (formula_str.find(kpi.get('abbreviation')) != -1), kpis))
+    market_ids = list(map(lambda m: m.get('id'), markets))
+    branch_ids = list(map(lambda b: b.get('id'), branches)) 
+    instruments = list(filter(lambda i: i.get('marketId') in market_ids and i.get('branchId') in branch_ids, instruments))
+    return instruments
+
     
-    print(formula_str)
-    print(kpis)
-    
-def _save_summary_kpis():
+def _save_summary_kpis_list():
     """
     Internal function for saving list of available summary KPIs. Abbreviations
     need to be added manually for added user friendlyness in the formulas.
     """
-    meta_URL = "https://apiservice.borsdata.se/v1/instruments/kpis/metadata"
-    kpis_URL = "https://apiservice.borsdata.se/v1/instruments/3/kpis/year/summary"
-    try:
-        res = requests.get(kpis_URL, { "authKey": os.getenv('BORSDATA_API_KEY'), "maxCount": 20 })
-        meta_res = requests.get(meta_URL, { "authKey": os.getenv('BORSDATA_API_KEY') })
-        if res.status_code == HTTPStatus.OK:
-            kpis = res.json()['kpis']
-            meta = meta_res.json()['kpiHistoryMetadatas']
-            
-            kpi_ids = list(map(lambda kpi: kpi.get('KpiId'), kpis))
-            kpis = list(filter(lambda kpi: kpi.get('kpiId') in kpi_ids, meta))
+    kpis_metadata = borsdata.fetch_kpis_metadata()
+    kpis_summary = borsdata.fetch_kpis_summary(3)
+    
+    kpi_ids = list(map(lambda kpi: kpi.get('KpiId'), kpis_summary))
+    kpis = list(filter(lambda kpi: kpi.get('kpiId') in kpi_ids, kpis_metadata))
+    
+    with open('data.json', 'w') as f:
+        json.dump(kpis, f, indent=4, sort_keys=True)
+    
+    
+    
+def _get_kpis_list_from_filters(filters):
+    formulas = list(map(lambda f: f.get('formula'), filters))
+    formula_str = str(ft.reduce(lambda s1, s2: s1 +''+ s2, formulas))
 
-            with open('data.json', 'w') as f:
-                json.dump(kpis, f, indent=4, sort_keys=True)
-        else:
-            return False
-    except HTTPError:
-        return False
+    script_location = Path(__file__).absolute().parent
+    file_location = script_location / 'kpis.json'
+    
+    kpis_file = file_location.open()
+    kpis = json.load(kpi_file)
+    
+    kpis = list(filter(lambda kpi: kpi.get('abbreviation') and (formula_str.find(kpi.get('abbreviation')) != -1), kpis))
+    return kpis
 
-
+def _get_kpis_summary_for_instruments(instruments):
+    
+    for instrument in instruments:
+        kpis_summary = borsdata.fetch_kpis_summary(instrument['insId'])
+        #print(pd.DataFrame(kpis_summary))
+        df = pd.json_normalize(kpis_summary, record_path=['values'],  meta=['KpiId'])
+        df.set_index(['KpiId', 'y'], inplace=True)
+        print(df)
+        
+def _get_pricedata_for_instruments(instruments):
+    
+    for instrument in instruments:
+        print(pd.read_csv(f"./pricedata/{instrument['insId']} {instrument['ticker']}.csv"))
 
 
 def getBacktestResult():
@@ -117,12 +151,15 @@ def getBacktestResult():
     
 
 def run_backtest(md: StrategyMetadata):
-    instruments = get_instrument_list(md.countries, md.markets, md.sectors, md.branches)
+    instruments = _get_instrument_list(md.markets, md.branches)
     
-    if instruments: print(instruments)
-    else: print("nope")
+    _get_kpis_summary_for_instruments(instruments)
+    
+    _get_pricedata_for_instruments(instruments)
+    
+    if instruments:
+        #_fetch_summary_kpis(instruments)
+        print(instruments)
 
-    print(get_kpi_list(md.filters))
     
-    _save_summary_kpis()
     

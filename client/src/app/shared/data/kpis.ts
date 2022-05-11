@@ -1,338 +1,340 @@
-[
+import { KPI } from "../models/borsdata";
+
+export const kpis: KPI[] = [
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 1,
-      "nameEn": "Dividend Yield",
-      "nameSv": "Direktavkastning",
-      "abbreviation": "DY"
+    format: "%",
+    isString: false,
+    kpiId: 1,
+    nameEn: "Dividend Yield",
+    nameSv: "Direktavkastning",
+    abbreviation: "DY"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 2,
-      "nameEn": "P/E",
-      "nameSv": "P/E",
-      "abbreviation": "PE"
+    format: null,
+    isString: false,
+    kpiId: 2,
+    nameEn: "P/E",
+    nameSv: "P/E",
+    abbreviation: "PE"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 3,
-      "nameEn": "P/S",
-      "nameSv": "P/S",
-      "abbreviation": "PS"
+    format: null,
+    isString: false,
+    kpiId: 3,
+    nameEn: "P/S",
+    nameSv: "P/S",
+    abbreviation: "PS"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 4,
-      "nameEn": "P/B",
-      "nameSv": "P/B",
-      "abbreviation": "PB"
+    format: null,
+    isString: false,
+    kpiId: 4,
+    nameEn: "P/B",
+    nameSv: "P/B",
+    abbreviation: "PB"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 5,
-      "nameEn": "Revenue/share",
-      "nameSv": "Oms\u00e4ttning/Aktie",
-      "abbreviation": "RPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 5,
+    nameEn: "Revenue/share",
+    nameSv: "Omsättning/Aktie",
+    abbreviation: "RPS"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 6,
-      "nameEn": "Earnings/share",
-      "nameSv": "Vinst/Aktie",
-      "abbreviation": "EPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 6,
+    nameEn: "Earnings/share",
+    nameSv: "Vinst/Aktie",
+    abbreviation: "EPS"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 7,
-      "nameEn": "Dividend",
-      "nameSv": "Utdelning",
-      "abbreviation": "DIV"
+    format: "CURR",
+    isString: false,
+    kpiId: 7,
+    nameEn: "Dividend",
+    nameSv: "Utdelning",
+    abbreviation: "DIV"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 8,
-      "nameEn": "Book value/share",
-      "nameSv": "Eget Kapital/Aktie",
-      "abbreviation": "BVPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 8,
+    nameEn: "Book value/share",
+    nameSv: "Eget Kapital/Aktie",
+    abbreviation: "BVPS"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 9,
-      "nameEn": "P/(E)x",
-      "nameSv": "P/(E)x",
-      "abbreviation": "PEX"
+    format: null,
+    isString: false,
+    kpiId: 9,
+    nameEn: "P/(E)x",
+    nameSv: "P/(E)x",
+    abbreviation: "PEX"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 10,
-      "nameEn": "EV/EBIT",
-      "nameSv": "EV/EBIT",
-      "abbreviation": "EVEBIT"
+    format: null,
+    isString: false,
+    kpiId: 10,
+    nameEn: "EV/EBIT",
+    nameSv: "EV/EBIT",
+    abbreviation: "EVEBIT"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 11,
-      "nameEn": "EV/EBITDA",
-      "nameSv": "EV/EBITDA",
-      "abbreviation": "EVEBITDA"
+    format: null,
+    isString: false,
+    kpiId: 11,
+    nameEn: "EV/EBITDA",
+    nameSv: "EV/EBITDA",
+    abbreviation: "EVEBITDA"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 12,
-      "nameEn": "EV/E",
-      "nameSv": "EV/E",
-      "abbreviation": "EVE"
+    format: null,
+    isString: false,
+    kpiId: 12,
+    nameEn: "EV/E",
+    nameSv: "EV/E",
+    abbreviation: "EVE"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 13,
-      "nameEn": "EV/FCF",
-      "nameSv": "EV/FCF",
-      "abbreviation": "EVFCF"
+    format: null,
+    isString: false,
+    kpiId: 13,
+    nameEn: "EV/FCF",
+    nameSv: "EV/FCF",
+    abbreviation: "EVFCF"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 15,
-      "nameEn": "EV/S",
-      "nameSv": "EV/S",
-      "abbreviation": "EVS"
+    format: null,
+    isString: false,
+    kpiId: 15,
+    nameEn: "EV/S",
+    nameSv: "EV/S",
+    abbreviation: "EVS"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 16,
-      "nameEn": "E/EV (%)",
-      "nameSv": "E/EV (%)",
-      "abbreviation": "EEV"
+    format: "%",
+    isString: false,
+    kpiId: 16,
+    nameEn: "E/EV (%)",
+    nameSv: "E/EV (%)",
+    abbreviation: "EEV"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 17,
-      "nameEn": "EBIT/EV (%)",
-      "nameSv": "EBIT/EV (%)",
-      "abbreviation": "EBITEV"
+    format: "%",
+    isString: false,
+    kpiId: 17,
+    nameEn: "EBIT/EV (%)",
+    nameSv: "EBIT/EV (%)",
+    abbreviation: "EBITEV"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 18,
-      "nameEn": "P/B-tang",
-      "nameSv": "P/B-tang",
-      "abbreviation": "PBTANG"
+    format: null,
+    isString: false,
+    kpiId: 18,
+    nameEn: "P/B-tang",
+    nameSv: "P/B-tang",
+    abbreviation: "PBTANG"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 19,
-      "nameEn": "PEG",
-      "nameSv": "PEG",
-      "abbreviation": "PEG"
+    format: null,
+    isString: false,
+    kpiId: 19,
+    nameEn: "PEG",
+    nameSv: "PEG",
+    abbreviation: "PEG"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 23,
-      "nameEn": "FCF growth",
-      "nameSv": "FCF / Aktie",
-      "abbreviation": "FCFG"
+    format: "CURR",
+    isString: false,
+    kpiId: 23,
+    nameEn: "FCF growth",
+    nameSv: "FCF / Aktie",
+    abbreviation: "FCFG"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 24,
-      "nameEn": "FCF margin%",
-      "nameSv": "FCF Marginal%",
-      "abbreviation": "FCFM"
+    format: "%",
+    isString: false,
+    kpiId: 24,
+    nameEn: "FCF margin%",
+    nameSv: "FCF Marginal%",
+    abbreviation: "FCFM"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 25,
-      "nameEn": "Capex %",
-      "nameSv": "Capex %",
-      "abbreviation": "CAPEX"
+    format: "%",
+    isString: false,
+    kpiId: 25,
+    nameEn: "Capex %",
+    nameSv: "Capex %",
+    abbreviation: "CAPEX"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 26,
-      "nameEn": "Dividend/FCF",
-      "nameSv": "Utdelning/FCF",
-      "abbreviation": "DIVFCF"
+    format: "%",
+    isString: false,
+    kpiId: 26,
+    nameEn: "Dividend/FCF",
+    nameSv: "Utdelning/FCF",
+    abbreviation: "DIVFCF"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 28,
-      "nameEn": "Gross margin",
-      "nameSv": "Bruttomarginal",
-      "abbreviation": "GM"
+    format: "%",
+    isString: false,
+    kpiId: 28,
+    nameEn: "Gross margin",
+    nameSv: "Bruttomarginal",
+    abbreviation: "GM"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 29,
-      "nameEn": "Operating margin",
-      "nameSv": "R\u00f6relsemarginal",
-      "abbreviation": "OM"
+    format: "%",
+    isString: false,
+    kpiId: 29,
+    nameEn: "Operating margin",
+    nameSv: "Rörelsemarginal",
+    abbreviation: "OM"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 30,
-      "nameEn": "Profit margin",
-      "nameSv": "Vinstmarginal",
-      "abbreviation": "PM"
+    format: "%",
+    isString: false,
+    kpiId: 30,
+    nameEn: "Profit margin",
+    nameSv: "Vinstmarginal",
+    abbreviation: "PM"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 32,
-      "nameEn": "EBITDA margin",
-      "nameSv": "EBITDA-marginal",
-      "abbreviation": "EBITDAM"
+    format: "%",
+    isString: false,
+    kpiId: 32,
+    nameEn: "EBITDA margin",
+    nameSv: "EBITDA-marginal",
+    abbreviation: "EBITDAM"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 33,
-      "nameEn": "Return on Equity",
-      "nameSv": "Avkastning P\u00e5 EK",
-      "abbreviation": "ROE"
+    format: "%",
+    isString: false,
+    kpiId: 33,
+    nameEn: "Return on Equity",
+    nameSv: "Avkastning På EK",
+    abbreviation: "ROE"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 34,
-      "nameEn": "Return on Assets",
-      "nameSv": "Avkastning p\u00e5 T",
-      "abbreviation": "ROA"
+    format: "%",
+    isString: false,
+    kpiId: 34,
+    nameEn: "Return on Assets",
+    nameSv: "Avkastning på T",
+    abbreviation: "ROA"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 39,
-      "nameEn": "Equity ratio",
-      "nameSv": "Soliditet",
-      "abbreviation": "ER"
+    format: "%",
+    isString: false,
+    kpiId: 39,
+    nameEn: "Equity ratio",
+    nameSv: "Soliditet",
+    abbreviation: "ER"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 41,
-      "nameEn": "Net Debt",
-      "nameSv": "Nettoskuld",
-      "abbreviation": "ND"
+    format: "%",
+    isString: false,
+    kpiId: 41,
+    nameEn: "Net Debt",
+    nameSv: "Nettoskuld",
+    abbreviation: "ND"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 46,
-      "nameEn": "Cash-%",
-      "nameSv": "Kassa-%",
-      "abbreviation": "CASH"
+    format: "%",
+    isString: false,
+    kpiId: 46,
+    nameEn: "Cash-%",
+    nameSv: "Kassa-%",
+    abbreviation: "CASH"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 51,
-      "nameEn": "OCF margin",
-      "nameSv": "OP-marginal",
-      "abbreviation": "OCFM"
+    format: "%",
+    isString: false,
+    kpiId: 51,
+    nameEn: "OCF margin",
+    nameSv: "OP-marginal",
+    abbreviation: "OCFM"
   },
   {
-      "format": "MCURR",
-      "isString": false,
-      "kpiId": 54,
-      "nameEn": "EBITDA",
-      "nameSv": "EBITDA",
-      "abbreviation": "EBITDA"
+    format: "MCURR",
+    isString: false,
+    kpiId: 54,
+    nameEn: "EBITDA",
+    nameSv: "EBITDA",
+    abbreviation: "EBITDA"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 68,
-      "nameEn": "Operating Cash Flow/share",
-      "nameSv": "Operativ kassafl\u00f6de/Aktie",
-      "abbreviation": "OCFPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 68,
+    nameEn: "Operating Cash Flow/share",
+    nameSv: "Operativ kassaflöde/Aktie",
+    abbreviation: "OCFPS"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 69,
-      "nameEn": "Cash flow - year/share",
-      "nameSv": "\u00c5rets kassafl\u00f6de/Aktie",
-      "abbreviation": "CFYPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 69,
+    nameEn: "Cash flow - year/share",
+    nameSv: "Årets kassaflöde/Aktie",
+    abbreviation: "CFYPS"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 71,
-      "nameEn": "EBITA/share",
-      "nameSv": "EBITDA/Aktie",
-      "abbreviation": "EBITDAPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 71,
+    nameEn: "EBITA/share",
+    nameSv: "EBITDA/Aktie",
+    abbreviation: "EBITDAPS"
   },
   {
-      "format": "CURR",
-      "isString": false,
-      "kpiId": 73,
-      "nameEn": "Net Debt/share",
-      "nameSv": "Nettoskuld/Aktie",
-      "abbreviation": "NDPS"
+    format: "CURR",
+    isString: false,
+    kpiId: 73,
+    nameEn: "Net Debt/share",
+    nameSv: "Nettoskuld/Aktie",
+    abbreviation: "NDPS"
   },
   {
-      "format": null,
-      "isString": false,
-      "kpiId": 78,
-      "nameEn": "EV/OCF",
-      "nameSv": "EV/OP",
-      "abbreviation": "EVOCF"
+    format: null,
+    isString: false,
+    kpiId: 78,
+    nameEn: "EV/OCF",
+    nameSv: "EV/OP",
+    abbreviation: "EVOCF"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 92,
-      "nameEn": "Intang.assets-%",
-      "nameSv": "Immat.tillg\u00e5ng.-%",
-      "abbreviation": "INTA"
+    format: "%",
+    isString: false,
+    kpiId: 92,
+    nameEn: "Intang.assets-%",
+    nameSv: "Immat.tillgång.-%",
+    abbreviation: "INTA"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 93,
-      "nameEn": "Workingcapital-%",
-      "nameSv": "R\u00f6relsekapital-%",
-      "abbreviation": "WC"
+    format: "%",
+    isString: false,
+    kpiId: 93,
+    nameEn: "Workingcapital-%",
+    nameSv: "Rörelsekapital-%",
+    abbreviation: "WC"
   },
   {
-      "format": "MCURR",
-      "isString": false,
-      "kpiId": 137,
-      "nameEn": "Total liabilities",
-      "nameSv": "Totala Skulder",
-      "abbreviation": "TL"
+    format: "MCURR",
+    isString: false,
+    kpiId: 137,
+    nameEn: "Total liabilities",
+    nameSv: "Totala Skulder",
+    abbreviation: "TL"
   },
   {
-      "format": "%",
-      "isString": false,
-      "kpiId": 140,
-      "nameEn": "Cash flow - year marginal",
-      "nameSv": "\u00c5rets kassafl\u00f6de marginal",
-      "abbreviation": "CFYM"
+    format: "%",
+    isString: false,
+    kpiId: 140,
+    nameEn: "Cash flow - year marginal",
+    nameSv: "Årets kassaflöde marginal",
+    abbreviation: "CFYM"
   }
 ]
