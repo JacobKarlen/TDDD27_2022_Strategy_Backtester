@@ -3,7 +3,10 @@ from urllib.error import HTTPError
 import pandas as pd
 from .models import StrategyMetadata
 import numpy as np
+
 from datetime import datetime as dt
+import pytz
+utc=pytz.UTC
 
 import time
 import json
@@ -13,6 +16,9 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 load_dotenv()
+
+from mathjspy import MathJS
+mjs = MathJS()
 
 import requests
 from http import HTTPStatus
@@ -94,23 +100,50 @@ def _get_kpis_list_from_filters(filters):
     file_location = script_location / 'kpis.json'
     
     kpis_file = file_location.open()
-    kpis = json.load(kpi_file)
+    kpis = json.load(kpis_file)
     
     kpis = list(filter(lambda kpi: kpi.get('abbreviation') and (formula_str.find(kpi.get('abbreviation')) != -1), kpis))
     return kpis
 
-def _get_kpis_summary_for_instruments(instruments):
+def _get_kpis_summary_for_instruments(instruments, kpis_list):
     """
     
     """
+    kpis_dict = {}
+    for kpi in kpis_list:
+        kpis_dict[kpi['kpiId']] = kpi['abbreviation']
+        
+    print(kpis_dict)
+    
+    dfs = []
     for instrument in instruments:
         kpis_summary = borsdata.fetch_kpis_summary(instrument['insId'])
-        #print(pd.DataFrame(kpis_summary))
-        df = pd.json_normalize(kpis_summary, record_path=['values'],  meta=['KpiId'])
-        df.set_index(['KpiId', 'y'], inplace=True)
-        print(df)
         
-def _get_pricedata_for_instruments(instruments):
+        df = pd.json_normalize(kpis_summary, record_path=['values'],  meta=['KpiId'])
+        #df.set_index(['KpiId', 'y'], inplace=True)
+        #df['abbreviation'] = df['KpiId'].filter(lambda id: id in kpis_dict.keys).transform(lambda id: kpis_dict[str(id)])
+        print("ids:", list(kpis_dict.keys()))
+        #print(df[df.KpiId in kpis_dict.keys])
+        df = df[df['KpiId'].isin(list(kpis_dict.keys()))]
+        df['ins_id'] = instrument['insId']
+        df['abbreviation'] = df['KpiId'].transform(lambda id: kpis_dict[id])
+        df.set_index(['ins_id', 'KpiId', 'y'], inplace=True)
+        dfs.append(df)
+
+      
+    df = pd.concat(dfs, axis=0)
+    print(df)
+    return df
+    
+# def _combine_price_kpis_data(price_data, kpis_data, kpis_list):
+    
+#     for kpi in kpis_list:
+#         abbrev = kpi['abbreviation']
+        
+#         for ins_id, df in price_data.groupby('ins_id'):
+#             price_data[abbrev] = kpis_data
+        
+def _get_pricedata_for_instruments(instruments, start, end):
     """
     Construct a pandas dataframe of aligned pricedata for all instruments
     in the supplied instrument list (from cached pricedata). 
@@ -121,14 +154,26 @@ def _get_pricedata_for_instruments(instruments):
         df['ticker'] = instrument['ticker']
         df['ins_id'] = instrument['insId']
         dfs.append(df)
-        
+    
+    # combine each instrument df into one df with aligned dates as index
     df = pd.concat(dfs, axis=0)
     df = df.set_index('date')
     df.index = pd.to_datetime(df.index)
     df = df[['ticker', 'ins_id', 'open', 'high', 'low', 'close', 'volume']]
     df = df.sort_index()
     
+    # calculate correct start and end dates based on data and user input
+    start = start if start.replace(tzinfo=utc) > df.index[0].replace(tzinfo=utc) else df.index[0]
+    end = end if end.replace(tzinfo=utc) < df.index[-1].replace(tzinfo=utc) else df.index[-1]
+    start = dt.combine(start.date(), dt.min.time())
+    end = dt.combine(end.date(), dt.min.time())  
+    df = df.loc[start:end]
+    
     return df
+
+def _calculate_rebalance_dates(data, freq):
+    rb_dates = list(data.groupby(pd.Grouper(freq=freq)).apply(lambda df: df.index.max()))
+    return rb_dates
 
 def getBacktestResult():
     df_data = {} # used for annual statistics
@@ -176,17 +221,40 @@ def getBacktestResult():
 def run_backtest(md: StrategyMetadata):
     instruments = _get_instrument_list(md.markets, md.branches)
     
-    data = _get_pricedata_for_instruments(instruments)
+    price_data = _get_pricedata_for_instruments(instruments, md.startDate, md.endDate)
+    rebalance_dates = _calculate_rebalance_dates(price_data, md.rebalanceFrequency)
     
+    kpis_list = _get_kpis_list_from_filters(md.filters)
+    kpis_data = _get_kpis_summary_for_instruments(instruments, kpis_list)
+    #data = _combine_price_kpis_data(price_data, kpis_data, kpis_list)
     
+    print(rebalance_dates)
+    for date in rebalance_dates:
+        data = price_data.loc[date]
+        for filter in md.filters:
+        
+            for ins_id, df in data.groupby('ins_id'):
+                scope = {}
+                for kpi in kpis_list:
+                    scope[kpi['abbreviation']] = kpis_data.loc[pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1], 'v']
+                mjs.update(scope)       
+                print(ins_id, mjs.eval(filter['formula']))
+                data.loc[data.ins_id == ins_id, 'f_val'] = mjs.eval(filter['formula'])
+                
+            data = data.where((data['f_val'] >= filter['minFilterValue']) & (data['f_val'] <= filter['maxFilterValue'])).dropna(how='all')
+            
+            ascending = False if filter['selectionCriteria'] == 'highest' else True
+            data = data.sort_values(by=['f_val'], ascending=ascending)
+            data = data.iloc[:filter['numberOfStocks']]
+      
+            
+        print(data)
+        break    
+            #mathjs.evaluate(formula, scope)
     
-    _get_kpis_summary_for_instruments(instruments)
-    
-    
-    
-    if instruments:
-        #_fetch_summary_kpis(instruments)
-        print(instruments)
+    # if instruments:
+    #     #_fetch_summary_kpis(instruments)
+    #     print(instruments)
 
     
     
