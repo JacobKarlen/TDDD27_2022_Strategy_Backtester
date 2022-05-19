@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterPageComponent, canActivate: [ LoggedInGuardSerivce] },
   { path: 'login', component: LoginPageComponent, canActivate: [ LoggedInGuardSerivce ] },
   { path: 'backtester', component: BacktesterPageComponent, canActivate: [ AuthGuardService ] },
-  { path: ':user/strategies', component: UserStrategiesPageComponent, canActivate: [ AuthGuardService ] }
+  { path: ':username/strategies', component: UserStrategiesPageComponent, canActivate: [ AuthGuardService ] }
 ];
 
 @NgModule({

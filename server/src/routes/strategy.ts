@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { IStrategy, Strategy } from "../models/backtester";
 import { checkAuthenticated } from "../auth/auth-middleware";
 import { HydratedDocument } from "mongoose";
+import { User, IUser } from "../models/user";
 
 export const strategyRouter = Router();
 
@@ -15,4 +16,24 @@ strategyRouter.get('/strategies/my', checkAuthenticated, (req: Request, res: Res
     Strategy.find({ user: req.user?._id }, async (err: Error, strategies: HydratedDocument<IStrategy>) => {
         res.json(strategies);
     });
+})
+
+strategyRouter.get('/users/:username/strategies/', checkAuthenticated, (req: Request, res: Response) => {
+    let username = req.params.username
+    User.find({ username: username }, async (err: Error, users: HydratedDocument<IUser[]>) => {
+        
+        let userId = users[0]._id
+
+        Strategy.find({ user: userId }, async (err: Error, strategies: HydratedDocument<IStrategy[]>) => {
+            if (userId.equals(req.user?._id)) {
+                res.json(strategies)
+            } else {
+                res.json(strategies.filter((strategy: IStrategy) => strategy.metadata.accessStatus == 'public'))
+            }
+            
+        });
+
+    })
+
+    
 })

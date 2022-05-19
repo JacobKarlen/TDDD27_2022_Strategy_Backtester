@@ -20,5 +20,8 @@ export class StrategyService {
     return this.http.get<Strategy[]>(this.baseUrl + '/my')
   }
 
+  getUserStrategies(username: string): Observable<Strategy[]> {
+    return this.http.get<Strategy[]>('http://localhost:8080/api/users/'+username+'/strategies')
+  }
 
 }
