@@ -55,3 +55,10 @@ usersRouter.put('/users/unfollow/:username', checkAuthenticated, async (req: Req
         }
     });
 })
+
+usersRouter.get('/users', checkAuthenticated, (req: Request, res: Response) => {
+    User.find({}, async (err: Error, users: HydratedDocument<IUser>) => {
+        res.json(users);
+    });
+})
+
