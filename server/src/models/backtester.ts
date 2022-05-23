@@ -77,7 +77,8 @@ export interface StrategyResult {
 export interface IStrategy {
     metadata: StrategyMetadata,
     result: StrategyResult,
-    user: Schema.Types.ObjectId | undefined
+    user: Schema.Types.ObjectId | undefined,
+    username: String
 }
 
 
@@ -105,7 +106,8 @@ export interface IStrategy {
 const strategySchema = new Schema<IStrategy>({
     metadata: { type: Schema.Types.Mixed , required: true },
     result: { type: Schema.Types.Mixed , required: true },
-    user: { type: Schema.Types.ObjectId, required: true }
+    user: { type: Schema.Types.ObjectId, required: true },
+    username: { type: Schema.Types.String, required: true }
 });
 
 

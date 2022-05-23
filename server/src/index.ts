@@ -9,6 +9,7 @@ import { IUser, User } from "./models/user";
 import { borsdataRouter } from "./routes/borsdata";
 import { backtesterRouter } from "./routes/backtester";
 import { strategyRouter } from "./routes/strategy";
+import { usersRouter } from "./routes/users";
 
 require("dotenv")
 
@@ -21,7 +22,8 @@ const MongoStore = require("connect-mongo")
 declare global {
 	namespace Express {
 	  interface User {
-		_id: mongoose.Schema.Types.ObjectId
+		_id: mongoose.Schema.Types.ObjectId,
+		username: String
 	  }
 	}
   }
@@ -76,5 +78,6 @@ app.use("/api/", authRouter)
 app.use("/api/", borsdataRouter)
 app.use("/api/", backtesterRouter)
 app.use("/api/", strategyRouter)
+app.use("/api/", usersRouter)
 
 app.listen(config.port, () =>  console.log(`Express app listening on ${config.port}!`))

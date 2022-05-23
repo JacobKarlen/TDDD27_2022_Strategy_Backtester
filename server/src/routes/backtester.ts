@@ -56,7 +56,8 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
         let strategy: IStrategy = {
             metadata: strategyMetadata,
             result: result,
-            user: req.user?._id
+            user: req.user?._id,
+            username: req.user?.username || ""
         }
 
         let savedStrategy = await (new Strategy(strategy)).save()

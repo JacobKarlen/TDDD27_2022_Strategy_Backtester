@@ -1,4 +1,6 @@
 import { Schema, model, Model, HydratedDocument, Document } from "mongoose";
+import mongoose from "mongoose";
+
 const bcrypt = require("bcrypt");
 
 export interface SlimUser { 
@@ -12,6 +14,8 @@ export interface IUser extends Document {
     username: string;
     email: string;
     password: string;
+    following: mongoose.Schema.Types.ObjectId[];
+    followers: mongoose.Schema.Types.ObjectId[];
 }
 
 interface UserModel extends Model<IUser> {
@@ -24,6 +28,8 @@ const userSchema = new Schema<IUser, UserModel>({
     "username": { type: String , required: true, unique: true },
     "email": { type: String , required: true, unique: true },
     "password": { type: String , required: true },
+    "following": [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    "followers": [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
 // Define schema methods for hashing and authentification
