@@ -7,7 +7,8 @@ app = FastAPI(debug=True)
 
 @app.post("/backtester")
 def read_backtester(metadata: StrategyMetadata):
-    run_backtest(metadata)
+    # change input to also take in strategyId (ObjectID) and use that when sending post request back w. results
+    results = run_backtest(metadata)
     return { "result": getBacktestResult() }
 
 @app.get("/")

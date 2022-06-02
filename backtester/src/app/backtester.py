@@ -266,7 +266,31 @@ def execute_orders(date):
                 
     portfolio.pending_orders = order_backlog
 
+def get_backtest_results(pf):
+    results = {}
+    trs = pf.transactions.where(pf.transactions.open_quantity == 0).dropna(how='all')
+    print(pf.transactions.tail())
+    wins = trs.where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
+    losses = trs.where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
+   
+    results['winRate'] = wins['avg_entry_price'].count() / pf.transactions['avg_entry_price'].count()
+    results['avgWin'] = ((wins.avg_exit_price - wins.avg_entry_price) / wins.avg_entry_price).mean()
+    results['avgLoss'] = ((losses.avg_exit_price - losses.avg_entry_price) / losses.avg_entry_price).mean()
+    results['avgWinHoldingPeriod'] = wins.holding_period.mean()
+    results['avgLossHoldingPeriod'] = losses.holding_period.mean()
     
+    rolling_max = pf.portfolio_snapshots['equity'].cummax()
+    daily_drawdown = pf.portfolio_snapshots['equity'] / rolling_max - 1.0
+    results['maxDrawdown'] = daily_drawdown.cummin().iloc[-1]
+    
+    results['cagr'] = (pf.portfolio_snapshots.iloc[-1]['equity'] / pf.portfolio_snapshots.iloc[0]['equity']) **(1/((pf.portfolio_snapshots.index[-1] - pf.portfolio_snapshots.index[0]).days / 365.25)) - 1 
+    
+    
+    return results
+    
+    
+    
+
 
 def getBacktestResult():
     df_data = {} # used for annual statistics
@@ -347,7 +371,6 @@ def run_backtest(md: StrategyMetadata):
         execute_orders(date)
         portfolio.take_snapshot(date, data) # take snapshot of current positions and on an aggregated portfolio level
         
-    print(portfolio.portfolio_snapshots.tail(15))
-
+    return get_backtest_results(portfolio)
 
     

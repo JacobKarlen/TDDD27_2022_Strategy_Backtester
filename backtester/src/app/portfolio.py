@@ -195,10 +195,11 @@ class Portfolio:
            
             for sid, tr_df in open_transactions.groupby('sid'):
                 
-                ticker, quantity, entry_price, stop_loss = tr_df.iloc[0][['ticker', 'open_quantity', 'avg_entry_price', 'stop_loss']]              
+                ticker, quantity, entry_price, entry_date, stop_loss = tr_df.iloc[0][['ticker', 'open_quantity', 'avg_entry_price', 'entry_date', 'stop_loss']]              
                 
-                if df[df.ins_id == sid].empty:
-                    if self.position_snapshots.empty:
+                
+                if sid not in df.ins_id.values:
+                    if self.position_snapshots.empty or date == entry_date:
                         current_price = entry_price
                     else:
                         last_traded = self.position_snapshots.loc[pd.IndexSlice[:, sid], :].index[-1][0]
