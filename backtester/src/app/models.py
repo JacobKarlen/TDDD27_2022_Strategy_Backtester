@@ -1,3 +1,4 @@
+from tokenize import Number
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -23,5 +24,11 @@ class StrategyMetadata(BaseModel):
 class RequestBody(BaseModel):
     
     md: StrategyMetadata
-    
     id: str
+    
+class Filter(BaseModel):
+    numberOfStocks: int
+    selectionCriteria: str
+    maxFilterValue: float
+    minFilterValue: float
+    formula: str
