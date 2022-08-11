@@ -58,8 +58,18 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
 
         let savedStrategy = await (new Strategy(strategy)).save()
 
-        getBacktestResult(strategyMetadata, savedStrategy._id)
+        getBacktestResult(strategyMetadata, savedStrategy._id).then(async (data) => {
+            try {
+                await Strategy.updateOne({ _id: data.strategyId }, { $set: { result: data.result }})
+                //res.status(200).json({ "message": "result successfully added to strategy"})
+                console.log("result successfully added to strategy")
+            } catch (e) {
+                //res.send(503).json({ "error": "the result was not added to the specified strategy"})
+                console.error("the result was not added to the specified strategy")
+            }  
+        })
 
+        console.log(savedStrategy)
         res.status(200).json(savedStrategy)
     
     } catch (e) {
@@ -69,8 +79,7 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
    
 })
 
-
-backtesterRouter.post('/backtester/post/results', async (req: Request, res: Response) => {
+backtesterRouter.post('/backtester/results', async (req: Request, res: Response) => {
     // need to get the strategy id or something to verify and use when updating result
     let data = req.body
     let strategyId = data.strategyId
@@ -80,5 +89,6 @@ backtesterRouter.post('/backtester/post/results', async (req: Request, res: Resp
     } catch (e) {
         res.send(503).json({ "error": "the result was not added to the specified strategy"})
     }  
+    console.log("in results route successfully")
     
 })

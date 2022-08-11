@@ -133,12 +133,13 @@ class Portfolio:
         ps_ss = self.position_snapshots
         date = date
     
-        if not ps_ss.empty and ps_ss.index.isin([(date, sid)]).any():
+        if not ps_ss.empty and ps_ss.index.isin([(date, sid)]).any():          
             return ps_ss.loc[pd.IndexSlice[date, sid], 'market_value'] / self.get_portfolio_equity()
         else:
             return 0
         
     def get_available_cash(self):
+
         cash = self.cash
 
         order_backlog = queue.Queue()
@@ -198,14 +199,21 @@ class Portfolio:
                 ticker, quantity, entry_price, entry_date, stop_loss = tr_df.iloc[0][['ticker', 'open_quantity', 'avg_entry_price', 'entry_date', 'stop_loss']]              
                 
                 
-                if sid not in df.ins_id.values:
+                sids = getattr(df.ins_id, 'values', [df.ins_id]) 
+                
+                if sid not in sids:
                     if self.position_snapshots.empty or date == entry_date:
                         current_price = entry_price
+                        
                     else:
                         last_traded = self.position_snapshots.loc[pd.IndexSlice[:, sid], :].index[-1][0]
                         current_price = self.position_snapshots.loc[pd.IndexSlice[last_traded, sid], 'current_price']
                 else:
-                    current_price = df[df.ins_id == sid].iloc[0]['close']
+                    if isinstance(df, pd.DataFrame):
+                        current_price = df[df.ins_id == sid].iloc[0]['close']
+                    else:
+                        if (df.ins_id == sid):
+                            current_price = df.close
                 
                 market_value = quantity * current_price
                 unrealized_pnl = market_value - quantity * entry_price

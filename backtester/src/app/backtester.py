@@ -11,6 +11,7 @@ import numpy as np
 
 from datetime import datetime as dt
 import pytz
+
 utc=pytz.UTC
 
 import time
@@ -42,7 +43,7 @@ class BorsdataAPI():
         if self.req_count % 10 == 0:
             time.sleep(1)
         try:
-            self.req_count = self.req_count + 1
+            self.req_count += 1
             res = requests.get(f"{self.BASE_URL}{route}", { "authKey": self.API_KEY, "maxCount": 20 })
         except HTTPError:
             print("Error with 3rd party Borsdata API")
@@ -101,6 +102,14 @@ def save_summary_kpis_list():
     
     
 def get_kpis_list_from_filters(filters):
+    """_summary_
+
+    Args:
+        filters (): _description_
+
+    Returns:
+        Array: _description_
+    """
     formulas = list(map(lambda f: f.get('formula'), filters))
     formula_str = str(ft.reduce(lambda s1, s2: s1 +''+ s2, formulas))
 
@@ -208,6 +217,7 @@ def rebalance_portfolio(data, date, price_data, number_of_stocks):
                 portfolio.pending_orders.put(OrderEvent(get_next_trade_date(price_data, date, sid), sid, ticker, 'MKT', open_quantity, price, 0, 'SELL', 'rebalance sell'))
     
     if not data.empty:
+        # rebalance all positions in candidate list to target size
         for ins_id, df in data.groupby('ins_id'):
             
             trade_date = get_next_trade_date(price_data, date, ins_id)
@@ -218,11 +228,13 @@ def rebalance_portfolio(data, date, price_data, number_of_stocks):
             ticker = df['ticker'][0]
     
             curr_size = portfolio.get_current_position_size(ins_id, get_prev_trade_date(price_data, date, ins_id))
-            
+
+        
+        
             size = size_factor - curr_size
             order_cost = size * portfolio.get_portfolio_equity()
-
-          
+    
+                
             quantity = math.floor(order_cost / price)
             
             cash = portfolio.get_available_cash()
@@ -230,24 +242,37 @@ def rebalance_portfolio(data, date, price_data, number_of_stocks):
                 quantity =  math.floor(order_cost / price) 
             else:
                 quantity =  math.floor(cash / price)
-                
-            
-            
-            print(ticker, quantity, "available cash:", cash)
-        
+                        
+            print(ticker, quantity, "available cash:", cash) 
         
             if quantity > 0:
-                portfolio.pending_orders.put(OrderEvent(trade_date, ins_id, ticker, 'MKT', quantity, price, 0, 'BUY', 'rebalance buy'))
+                portfolio.pending_orders.put(
+                    OrderEvent(
+                        trade_date, ins_id, ticker, 
+                        'MKT', quantity, price, 0, 
+                        'BUY', 'rebalance buy'
+                    )
+                )
+                
             if quantity < 0:
                 quantity = abs(quantity)
                 available_quantity = portfolio.get_available_quantity(ins_id)
                 if quantity > available_quantity:
                     quantity = available_quantity
                     
-                portfolio.pending_orders.put(OrderEvent(trade_date, ins_id, ticker, 'MKT', quantity, price, 0, 'SELL', 'rebalance sell'))
+                portfolio.pending_orders.put(
+                    OrderEvent(
+                        trade_date, ins_id, ticker, 
+                        'MKT', quantity, price, 0, 
+                        'SELL', 'rebalance sell'
+                    )
+                )
         
 
 def execute_orders(date):
+    """
+    Execute all pending orders for the given date.
+    """
     order_backlog = queue.Queue()
     while True:
         try:
@@ -255,11 +280,17 @@ def execute_orders(date):
         except queue.Empty:
             break
         else:
-            print(order.datetime, date)
             if order.datetime == date:
                 order.print_order()
-                portfolio.update_fill(FillEvent(order.datetime, order.sid, order.ticker,
-                                   'OMX', order.quantity, order.order_price, order.stop_loss, order.direction, order.order_type, order.quantity * order.order_price, 'SEK', order.indicator, None))
+                portfolio.update_fill(
+                    FillEvent(
+                        order.datetime, order.sid, order.ticker,
+                        'OMX', order.quantity, order.order_price,
+                        order.stop_loss, order.direction, 
+                        order.order_type, order.quantity * order.order_price,
+                        'SEK', order.indicator, None
+                    )
+                )
                 
             else:
                 order_backlog.put(order)
@@ -272,12 +303,14 @@ def get_backtest_results(pf):
     print(pf.transactions.tail())
     wins = trs.where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
     losses = trs.where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
+    
+    
    
-    results['winRate'] = wins['avg_entry_price'].count() / pf.transactions['avg_entry_price'].count()
-    results['avgWin'] = ((wins.avg_exit_price - wins.avg_entry_price) / wins.avg_entry_price).mean()
-    results['avgLoss'] = ((losses.avg_exit_price - losses.avg_entry_price) / losses.avg_entry_price).mean()
-    results['avgWinHoldingPeriod'] = wins.holding_period.mean()
-    results['avgLossHoldingPeriod'] = losses.holding_period.mean()
+    # results['winRate'] = wins['avg_entry_price'].count() / pf.transactions['avg_entry_price'].count()
+    # results['avgWin'] = ((wins.avg_exit_price - wins.avg_entry_price) / wins.avg_entry_price).mean()    
+    # results['avgLoss'] = ((losses.avg_exit_price - losses.avg_entry_price) / losses.avg_entry_price).mean()
+    # results['avgWinHoldingPeriod'] = wins.holding_period.mean()
+    # results['avgLossHoldingPeriod'] = losses.holding_period.mean()
     
     rolling_max = pf.portfolio_snapshots['equity'].cummax()
     daily_drawdown = pf.portfolio_snapshots['equity'] / rolling_max - 1.0
@@ -344,12 +377,15 @@ def run_backtest(md: StrategyMetadata):
     kpis_list = get_kpis_list_from_filters(md.filters)
     kpis_data = get_kpis_summary_for_instruments(instruments, kpis_list)
 
-    for i, (date, date_df) in enumerate(price_data.groupby(level=0)): # for each date in the selected period
+    for i, (date, date_df) in enumerate(price_data.groupby(level=0)):
+        # for each date in the selected period
         data = price_data.loc[date].copy()
         
-        if date in rebalance_dates: # rebalance portfolio
+        if date in rebalance_dates: 
+            # rebalance portfolio at each rebalance date
             
-            for filter in md.filters: # apply each filter in a pipeline
+            for filter in md.filters:
+                # apply each user-defined filter in a pipeline
             
                 for ins_id, df in data.groupby('ins_id'):
                     # set scope of kpis at rebalance date and calculate formula value for each instrument

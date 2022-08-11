@@ -19,3 +19,9 @@ class StrategyMetadata(BaseModel):
     branches: list
  
     filters: list
+    
+class RequestBody(BaseModel):
+    
+    md: StrategyMetadata
+    
+    id: str

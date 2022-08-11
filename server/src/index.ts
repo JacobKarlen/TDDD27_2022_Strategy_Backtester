@@ -17,7 +17,21 @@ const flash = require("express-flash");
 const session = require("express-session");
 const bodyParser = require("body-parser")
 
+const cors = require("cors")
+
 const MongoStore = require("connect-mongo")
+
+const corsOptions = {
+	origin: ['http://localhost:4200', 'http://backtester-api.dev', 'http://localhost:8000'],
+	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+	credentials: true,
+	methods: ['GET','POST','PUT','DELETE'],
+	allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
+  }
+//   "Access-Control-Allow-Origin", "")
+  // 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  // 	res.header("Access-Control-Allow-Credentials", "true")
+  // 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 
 declare global {
 	namespace Express {
@@ -61,16 +75,18 @@ app.use(passport.session())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
+
+app.use(cors(corsOptions))
 // Cross Origin middleware
-app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
+// app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
 
-	res.header("Access-Control-Allow-Origin", "http://localhost:4200")
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-	res.header("Access-Control-Allow-Credentials", "true")
-	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-	next()
+// 	res.header("Access-Control-Allow-Origin", "")
+// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+// 	res.header("Access-Control-Allow-Credentials", "true")
+// 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+// 	next()
 
-});
+// });
 
 // Connect routers
 app.use("/api/", router)
