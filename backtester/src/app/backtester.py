@@ -1,3 +1,4 @@
+import re
 import pytz
 import queue
 import random
@@ -459,11 +460,13 @@ def get_backtest_results(pf):
     
     results = {}
     trs = pf.transactions.where(pf.transactions.open_quantity == 0).dropna(how='all')
-    print(pf.transactions.tail())
     wins = trs.where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
     losses = trs.where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
     
-    
+    results['transactions'] = pf.transactions.to_json(orient='records')
+    results['executions'] = pf.executions.to_json(orient='records')
+    results['portfolioSnapshots'] = pf.portfolio_snapshots.to_json(orient='records')
+    results['positionSnapshots'] = pf.position_snapshots.to_json(orient='records')
    
     # results['winRate'] = wins['avg_entry_price'].count() / pf.transactions['avg_entry_price'].count()
     # results['avgWin'] = ((wins.avg_exit_price - wins.avg_entry_price) / wins.avg_entry_price).mean()    
@@ -475,6 +478,7 @@ def get_backtest_results(pf):
     daily_drawdown = pf.portfolio_snapshots['equity'] / rolling_max - 1.0
     results['maxDrawdown'] = daily_drawdown.cummin().iloc[-1]
     
+    results['totalReturn'] = pf.portfolio_snapshots.iloc[-1]['equity'] / pf.portfolio_snapshots.iloc[0]['equity']
     results['cagr'] = (pf.portfolio_snapshots.iloc[-1]['equity'] / pf.portfolio_snapshots.iloc[0]['equity']) **(1/((pf.portfolio_snapshots.index[-1] - pf.portfolio_snapshots.index[0]).days / 365.25)) - 1 
     
     
@@ -517,7 +521,10 @@ def run_backtest(md: StrategyMetadata):
                     scope = {}
                     for kpi in kpis_list:
                         # delay kpi data with one year to avoid look-ahead bias
-                        scope[kpi['abbreviation']] = kpis_data.loc[pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1], 'v']
+                        if kpis_data.index.isin([pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1]]).any():
+                            scope[kpi['abbreviation']] = kpis_data.loc[pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1], 'v']
+                        else:
+                            scope[kpi['abbreviation']] = -1000
                     mjs.update(scope)     
     
                     # Leverage mathjspy to evaluate the filter formulas the same way as in the front-end.

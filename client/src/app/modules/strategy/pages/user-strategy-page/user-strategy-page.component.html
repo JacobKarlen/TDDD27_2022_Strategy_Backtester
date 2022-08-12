@@ -1,3 +1,20 @@
 <mat-card>
-    <h1>Strategy</h1>
+    <h1>Strategy: {{strategy?.metadata?.strategyName}}</h1>
 </mat-card>
+
+<mat-card class="statistic-card">
+    <h2>Total Return</h2>
+    {{strategy?.result?.totalReturn | number}}
+</mat-card>
+
+
+<mat-card class="statistic-card">
+    <h2>CAGR</h2>
+    {{strategy?.result?.cagr | number}}
+</mat-card>
+
+<mat-card class="statistic-card">
+    <h2>Max Drawdown</h2>
+    {{strategy?.result?.maxDrawdown | number}}
+</mat-card>
+

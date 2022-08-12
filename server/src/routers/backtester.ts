@@ -10,7 +10,6 @@ export const backtesterRouter = Router();
 
 export const getBacktestResult = async (metadata: StrategyMetadata, strategyId: mongoose.Types.ObjectId): Promise<any> => {
     // used to request backtester api
-    // currently serves fake generated results
     let URL = `http://backtester-api.dev:8000/backtester` 
 
     return new Promise((resolve, reject) => {

@@ -30,49 +30,65 @@ export interface StrategyMetadata {
     filters: Filter[]
 }
 
-
-
-export interface MonthlyRebalance {
-    month: string;
-    date: string;
-}
-export interface YearlyRebalance {
-    year: string;
-    months: MonthlyRebalance[]
-}
-export interface RebalanceSchedule extends Array<YearlyRebalance> {}
-
-
-export interface YearlyStrategyStatistics {
-    count: number;
-    mean: number;
-    std: number;
-    min: number;
-    '25%': number;
-    '50%': number;
-    '75%': number;
-    max: number;
-    return: number;
+export interface Transaction {
+    sid: Number;
+    ticker: String;
+    direction: String;
+    entry_date: Date;
+    avg_entry_price: Number;
+    exit_date: Date;
+    avg_exit_price: Number;
+    holding_period: Number;
+    stop_loss: Number;
+    open_quantity: Number;
 }
 
-export interface SummaryStrategyStatistics {
-    totalReturn: number;
-    cagr: number;
+export interface Execution {
+    date: Date;
+    transaction_id: Number;
+    sid: Number;
+    ticker: String;
+    indicator: String;
+    buy_sell: String;
+    order_type: String;
+    commission: Number;
+    quantity: Number;
+    price: Number;
+    currency: String;
 }
 
-export interface YearlyStrategyResult {
-    statistics: YearlyStrategyStatistics;
-    months: {
-        [month: string]: number;
-    } 
+export interface PortfolioSnapshot {
+    date: Date;
+    cash: Number;
+    market_value: Number;
+    equity: Number;
+    leverage: Number;
+    unrealized_pnl: Number;
+}
+
+export interface PositionSnapshot {
+    date: Date;
+    sid: Number;
+    ticker: String;
+    quantity: Number;
+    entry_price: Number;
+    current_price: Number;
+    stop_loss: Number;
+    market_value: Number;
+    unrealized_pnl: Number;
 }
 
 export interface StrategyResult {
-    statistics: SummaryStrategyStatistics;
-    years : {
-        [year: string]: YearlyStrategyStatistics;
-    }
+    totalReturn: Number;
+    maxDrawdown: Number;
+    cagr: Number;
+
+    transactions: Array<Transaction>;
+    executions: Array<Execution>;
+    portfolioSnapshots: Array<PortfolioSnapshot>;
+    positionSnapshots: Array<PositionSnapshot>;
 }
+
 
 export interface IStrategy {
     metadata: StrategyMetadata,
@@ -80,28 +96,6 @@ export interface IStrategy {
     user: Schema.Types.ObjectId | undefined,
     username: String
 }
-
-
-
-// const strategyMetadataSchema = new Schema<StrategyMetadata>({
-//     strategyName: { type: String , required: true },
-//     accessStatus: { type: String , required: true },
-
-//     startDate: { type: Date , required: true },
-//     endDate: { type: Date , required: true },
-
-//     transactionCost: { type: Number , required: true },
-//     rebalanceFrequency: { type: String , required: true },
-
-//     countries: { type: Object , required: true },
-//     markets: Markets;
-
-//     sectors: Sectors;
-//     branches: Branches;
- 
-//     filters: Filter[]
- 
-// });
 
 const strategySchema = new Schema<IStrategy>({
     metadata: { type: Schema.Types.Mixed , required: true },

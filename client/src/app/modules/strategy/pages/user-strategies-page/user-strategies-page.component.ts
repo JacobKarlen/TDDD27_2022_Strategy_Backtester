@@ -4,6 +4,8 @@ import { StrategyService } from 'src/app/core/services/strategy-service.service'
 import { Strategy } from 'src/app/shared/models/backtester';
 import { User } from 'src/app/shared/models/user';
 
+import { Router } from '@angular/router'
+
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-user-strategies-page',
@@ -17,7 +19,8 @@ export class UserStrategiesPageComponent implements OnInit {
   constructor(
     private strategyService: StrategyService, 
     private authService: AuthService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +36,7 @@ export class UserStrategiesPageComponent implements OnInit {
 
 
     this.strategyService.getUserStrategies(username).subscribe((strategies: Strategy[]) => {
+      console.log(strategies)
       this.strategies = strategies
     })
   }

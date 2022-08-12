@@ -197,7 +197,7 @@ export class BacktesterFormComponent implements OnInit {
     console.log(strategyMetadata)
   
     this.backtesterService.runBacktest(strategyMetadata).subscribe((res: any) => {
-      console.log(res.message)
+      console.log(res)
     })
   }
 
@@ -207,6 +207,9 @@ export class BacktesterFormComponent implements OnInit {
       // correct for changed filter orders
       return formValues.filters['filter'+fn]
     })
+    formValues.startDate = new Date(formValues.startDate)
+    formValues.endDate = new Date(formValues.endDate) 
+
     let strategyMetadata: StrategyMetadata = formValues;
 
     console.log(strategyMetadata)

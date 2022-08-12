@@ -25,6 +25,10 @@ services:
     depends_on:
      - database
     command: npm run dev
+    networks:
+      default:
+        aliases:
+          - express-server.dev
  database: # name of the third service
     image: mongo # specify image to build container from
     volumes:

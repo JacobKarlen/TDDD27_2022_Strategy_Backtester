@@ -1,5 +1,66 @@
 import { Countries, Markets, Sectors, Branches } from "./borsdata"
 
+export interface Transaction {
+    sid: number;
+    ticker: String;
+    direction: String;
+    entry_date: Date;
+    avg_entry_price: number;
+    exit_date: Date;
+    avg_exit_price: number;
+    holding_period: number;
+    stop_loss: number;
+    open_quantity: number;
+}
+
+export interface Execution {
+    date: Date;
+    transaction_id: number;
+    sid: number;
+    ticker: String;
+    indicator: String;
+    buy_sell: String;
+    order_type: String;
+    commission: number;
+    quantity: number;
+    price: number;
+    currency: String;
+}
+
+export interface PortfolioSnapshot {
+    date: Date;
+    cash: number;
+    market_value: number;
+    equity: number;
+    leverage: number;
+    unrealized_pnl: number;
+}
+
+export interface PositionSnapshot {
+    date: Date;
+    sid: number;
+    ticker: String;
+    quantity: number;
+    entry_price: number;
+    current_price: number;
+    stop_loss: number;
+    market_value: number;
+    unrealized_pnl: number;
+}
+
+export interface StrategyResult {
+    totalReturn: number;
+    maxDrawdown: number;
+    cagr: number;
+
+    transactions: Array<Transaction>;
+    executions: Array<Execution>;
+    portfolioSnapshots: Array<PortfolioSnapshot>;
+    positionSnapshots: Array<PositionSnapshot>;
+}
+
+
+
 export interface StrategyMetadata {
     strategyName: String; 
     accessStatus: String;
@@ -27,39 +88,10 @@ export interface StrategyMetadata {
     ]
 }
 
-export interface YearlyStrategyStatistics {
-    count: number;
-    mean: number;
-    std: number;
-    min: number;
-    '25%': number;
-    '50%': number;
-    '75%': number;
-    max: number;
-    return: number;
-}
-
-export interface SummaryStrategyStatistics {
-    totalReturn: number;
-    cagr: number;
-}
-
-export interface YearlyStrategyResult {
-    statistics: YearlyStrategyStatistics;
-    months: {
-        [month: string]: number;
-    } 
-}
-
-export interface StrategyResult {
-    statistics: SummaryStrategyStatistics;
-    years : {
-        [year: string]: YearlyStrategyStatistics;
-    }
-}
 
 export interface Strategy {
     metadata: StrategyMetadata,
-    result: StrategyResult,
-    user: any
+    result?: StrategyResult,
+    user: String | undefined,
+    username: String
 }

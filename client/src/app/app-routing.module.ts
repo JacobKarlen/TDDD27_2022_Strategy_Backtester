@@ -5,13 +5,19 @@ import { LoginPageComponent } from './modules/auth/pages/login-page/login-page.c
 import { RegisterPageComponent } from './modules/auth/pages/register-page/register-page.component';
 import { FilterComponent } from './modules/backtester/components/filter/filter.component';
 import { BacktesterPageComponent } from './modules/backtester/pages/backtester-page/backtester-page.component';
+import { StrategiesExplorePageComponent } from './modules/strategy/pages/strategies-explore-page/strategies-explore-page.component';
+import { StrategiesFeedPageComponent } from './modules/strategy/pages/strategies-feed-page/strategies-feed-page.component';
 import { UserStrategiesPageComponent } from './modules/strategy/pages/user-strategies-page/user-strategies-page.component';
+import { UserStrategyPageComponent } from './modules/strategy/pages/user-strategy-page/user-strategy-page.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterPageComponent, canActivate: [ LoggedInGuardSerivce] },
   { path: 'login', component: LoginPageComponent, canActivate: [ LoggedInGuardSerivce ] },
   { path: 'backtester', component: BacktesterPageComponent, canActivate: [ AuthGuardService ] },
-  { path: ':username/strategies', component: UserStrategiesPageComponent, canActivate: [ AuthGuardService ] }
+  { path: 'strategies/feed', component: StrategiesFeedPageComponent, canActivate: [ AuthGuardService ] },
+  { path: 'strategies/explore', component: StrategiesExplorePageComponent, canActivate: [ AuthGuardService ] },
+  { path: ':username/strategies', component: UserStrategiesPageComponent, canActivate: [ AuthGuardService ] },
+  { path: ':username/strategies/:strategyName', component: UserStrategyPageComponent, canActivate: [ AuthGuardService ] },
 ];
 
 @NgModule({

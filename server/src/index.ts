@@ -1,15 +1,16 @@
 import express from "express";
 import { config } from "./config";
-import { router } from "./routes/routes";
+import { router } from "./routers/routes";
 import mongoose from "mongoose";
 import passport from "passport";
 import { initialize as initializePassport } from "./auth/passport-config";
 import { authRouter } from "./auth/auth-routes";
-import { IUser, User } from "./models/user";
-import { borsdataRouter } from "./routes/borsdata";
-import { backtesterRouter } from "./routes/backtester";
-import { strategyRouter } from "./routes/strategy";
-import { usersRouter } from "./routes/users";
+import { borsdataRouter } from "./routers/borsdata";
+import { backtesterRouter } from "./routers/backtester";
+import { strategyRouter } from "./routers/strategy";
+import { usersRouter } from "./routers/users";
+
+import { Strategy  } from './models/backtester'
 
 require("dotenv")
 
@@ -28,10 +29,6 @@ const corsOptions = {
 	methods: ['GET','POST','PUT','DELETE'],
 	allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept"
   }
-//   "Access-Control-Allow-Origin", "")
-  // 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-  // 	res.header("Access-Control-Allow-Credentials", "true")
-  // 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
 
 declare global {
 	namespace Express {
@@ -69,24 +66,16 @@ app.use(session({
 	})
 }))
 
+// Strategy.deleteMany({}).then(res => console.log("strategy deletion successful"))
+
 app.use(passport.initialize())
 app.use(passport.session())
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-
+// cross-origin middleware
 app.use(cors(corsOptions))
-// Cross Origin middleware
-// app.use(function(req: express.Request, res: express.Response, next: express.NextFunction) {
-
-// 	res.header("Access-Control-Allow-Origin", "")
-// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-// 	res.header("Access-Control-Allow-Credentials", "true")
-// 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-// 	next()
-
-// });
 
 // Connect routers
 app.use("/api/", router)

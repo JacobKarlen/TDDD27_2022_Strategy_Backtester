@@ -1,8 +1,6 @@
-from datetime import datetime as dt
 from fastapi import FastAPI
-from .backtester import getBacktestResult, run_backtest
-from .models import RequestBody, StrategyMetadata
-import requests
+from .backtester import run_backtest
+from .models import RequestBody
 app = FastAPI(debug=True)
 
 @app.post("/backtester")

@@ -34,6 +34,18 @@ strategyRouter.get('/users/:username/strategies/', checkAuthenticated, (req: Req
         });
 
     })
+    
+})
 
+strategyRouter.get('/users/:username/strategies/:strategyName', checkAuthenticated, (req: Request, res: Response) => {
+    let { username, strategyName } = req.params
+    Strategy.findOne({ 'username': username, 'metadata.strategyName': strategyName }, async (err: Error, strategy: HydratedDocument<IStrategy>) => { 
+     
+        if (strategy.user && strategy.user == req.user?._id) {
+            res.json(strategy)
+        } else if (strategy.metadata.accessStatus === 'public') {
+            res.json(strategy)
+        }    
+    })
     
 })

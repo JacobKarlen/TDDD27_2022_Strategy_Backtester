@@ -21,7 +21,11 @@ export class StrategyService {
   }
 
   getUserStrategies(username: string): Observable<Strategy[]> {
-    return this.http.get<Strategy[]>('http://localhost:8080/api/users/'+username+'/strategies')
+    return this.http.get<Strategy[]>(`http://localhost:8080/api/users/${username}/strategies`)
+  }
+
+  getStrategy(username: string, strategyName: string): Observable<Strategy> {
+    return this.http.get<Strategy>(`http://localhost:8080/api/users/${username}/strategies/${strategyName}`)
   }
 
 }
