@@ -2,9 +2,14 @@ import pandas as pd
 import queue
 
 class Portfolio:
+    """
+    Class representing a portfolio and tracks all statistics such as executions, transactions,
+    position and portfolio snapshots (A daily snapshot of each position and aggregated statistics
+    on a portfolio level). These 4 categories of data contain all information needed to derive
+    pretty much any performance statistic of the portfolio.
+    """
     
-    def __init__(self):
-        
+    def __init__(self):  
         self.cash = 100000.0
         
         self.pending_orders = queue.Queue()
@@ -43,6 +48,15 @@ class Portfolio:
         
         
     def add_transaction(self, event):
+        """
+        Takes in a Fill Event and adds a transaction record to the portfolio.
+
+        Args:
+            event (FillEvent): A Fill Event representing an executed order.
+
+        Returns:
+            int: returns the transaction id of the newly added transaction.
+        """
 
         direction = 'LONG' if event.direction == 'BUY' else 'SHORT'
         
@@ -58,7 +72,14 @@ class Portfolio:
         return transaction_id
     
     def update_transaction(self, transaction_id, date):
-        #date = self.data.datetime
+        """
+        Updates an existing transaction with any new executions
+        in the same instrument that should be grouped under the same transaction.
+
+        Args:
+            transaction_id (int): The transaction id for the transaction to update.
+            date (date): The date when the update takes place.
+        """
         avg_entry_price = 0
         avg_exit_price = 0
         buy_quantity = 0
@@ -86,6 +107,12 @@ class Portfolio:
                 
         
     def add_execution(self, ex):
+        """
+        Adds an execution record to the portfolio based on a Fill Event.
+
+        Args:
+            ex (FillEvent): A Fill Event representing an executed order.
+        """
         
         trs = self.transactions
         if not trs.empty:
@@ -106,6 +133,13 @@ class Portfolio:
             self.update_transaction(transaction_id, ex.datetime)
             
     def update_fill(self, event):
+        """
+        Updates the cash balance based on the Fill Event (execution) and
+        adds a record of the executon to the portfolio.
+
+        Args:
+            event (_type_): _description_
+        """
         if event.type == 'FILL':
             self.add_execution(event)
             factor = -1 if event.direction == 'BUY' else 1
@@ -113,6 +147,12 @@ class Portfolio:
             self.cash = self.cash + factor * event.fill_cost - event.commission
             
     def get_open_positions(self):
+        """
+        Get all currently open positions in the portfolio as a pandas DataFrame.
+
+        Returns:
+            pd.DataFrame: A pandas DataFrame of all open positions.
+        """
         trs = self.transactions
         if not trs.empty:
             open = trs.loc[(trs.open_quantity !=0)]
@@ -130,6 +170,17 @@ class Portfolio:
     
           
     def get_current_position_size(self, sid, date):
+        """
+        Get the current position size of stock with instrument id sid
+        on the specified date as percent of portfolio equity.
+
+        Args:
+            sid (int): Borsdata instrument id for the stock.
+            date (date): The date you want the size for.
+
+        Returns:
+            float: The position size in percent of portfolio equity.
+        """
         ps_ss = self.position_snapshots
         date = date
     
@@ -139,6 +190,13 @@ class Portfolio:
             return 0
         
     def get_available_cash(self):
+        """
+        Get currently available cash in the portfolio when taking in to account
+        pending buy and sell orders.
+
+        Returns:
+            float: The currently available cash factoring in pending orders.
+        """
 
         cash = self.cash
 
@@ -161,6 +219,16 @@ class Portfolio:
     
         
     def get_available_quantity(self, sid):
+        """
+        Get the currently available quantity of stock with instrument id sid in
+        the portfolio after taking into account buy and sell orders of the stock.
+
+        Args:
+            sid (int): Borsdata instrument id for the stock to get quantity of.
+
+        Returns:
+            int: The available quantity (number of shares) of the stock currently in the portfolio.
+        """
         open_quantity = 0
         open_pos = self.get_open_positions()
         if not open_pos.empty and not open_pos.loc[open_pos.sid == sid].empty:
@@ -184,11 +252,16 @@ class Portfolio:
         return open_quantity
             
     def take_snapshot(self, date, df):   
-        #date = self.data.datetime
-        #df = self.data.latest_data
-        
-        """ takes a snapshot of open positions for each date and a snapshot of the portfolio as a whole.
-            Will be used for analysis on equity level and to support money management decisions."""
+        """
+        Takes a snapshot of open positions for each date and a snapshot of the portfolio as a whole.
+        These snapshots can then be used later to derive performance metrics and statistics on both
+        a trade and portfolio level.
+
+        Args:
+            date (date): The date of the snapshot.
+            df (pd.DataFrame): A pandas DataFrame of price data for the stocks trading during the
+            date of the snapshot.
+        """
         
         open_transactions = self.get_open_positions()
         

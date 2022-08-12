@@ -7,14 +7,18 @@ app = FastAPI(debug=True)
 
 @app.post("/backtester")
 def read_backtester(body: RequestBody):
-    # change input to also take in strategyId (ObjectID) and use that when sending post request back w. results
+    """
+    Main backtester route for running backtests.
+
+    Args:
+        body (RequestBody): The expected request body with strategy metadata
+        defining the strategy and an id representing the mongodb strategy id.
+
+    Returns:
+        obj: return object with strategy id and  backtest results.
+    """
     result = run_backtest(body.md)
-    
-    # print(result)
-    # requests.post('http://express-server.dev/api/backtester/results', json={
-    #     'strategyId': body.id,
-    #     'result': result
-    # })
+
     return {
         'strategyId': body.id,
         'result': result
