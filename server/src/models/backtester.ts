@@ -89,9 +89,14 @@ export interface StrategyResult {
     positionSnapshots: Array<PositionSnapshot>;
 }
 
+export interface StrategyStatus {
+    status: String;
+    message: String;
+}
 
 export interface IStrategy {
     metadata: StrategyMetadata,
+    status: StrategyStatus,
     result?: StrategyResult,
     user: Schema.Types.ObjectId | undefined,
     username: String
@@ -99,6 +104,7 @@ export interface IStrategy {
 
 const strategySchema = new Schema<IStrategy>({
     metadata: { type: Schema.Types.Mixed , required: true },
+    status: { type: Schema.Types.Mixed, required: true },
     result: { type: Schema.Types.Mixed , required: false },
     user: { type: Schema.Types.ObjectId, required: true },
     username: { type: Schema.Types.String, required: true }

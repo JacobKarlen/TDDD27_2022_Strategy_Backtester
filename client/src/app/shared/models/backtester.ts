@@ -88,9 +88,15 @@ export interface StrategyMetadata {
     ]
 }
 
+export interface StrategyStatus {
+    status: String;
+    message: String;
+}
+
 
 export interface Strategy {
     metadata: StrategyMetadata,
+    status: StrategyStatus,
     result?: StrategyResult,
     user: String | undefined,
     username: String
