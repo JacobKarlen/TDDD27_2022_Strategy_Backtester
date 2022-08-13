@@ -45,6 +45,10 @@ export class AuthService {
     return ui ? JSON.parse(ui) : null
   }
 
+  getUpdatedUser(): Observable<User> {
+    return this.http.get<User>(this.baseUrl + '/loggedin/user')
+  }
+
   removeUserInfo(): void {
     localStorage.removeItem('userInfo')
   }

@@ -56,6 +56,13 @@ usersRouter.put('/users/unfollow/:username', checkAuthenticated, async (req: Req
     });
 })
 
+usersRouter.get('/following', checkAuthenticated, async (req: Request, res: Response) => { 
+    let following = req.user?.following;
+    User.find({ _id: { $in: following } }, async (err: Error, users: HydratedDocument<IUser[]>) => {
+        res.status(200).json(users)
+    })
+})
+
 usersRouter.get('/users', checkAuthenticated, (req: Request, res: Response) => {
     User.find({}, async (err: Error, users: HydratedDocument<IUser>) => {
         res.json(users);

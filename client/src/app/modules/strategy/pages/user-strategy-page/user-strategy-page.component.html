@@ -1,20 +1,67 @@
 <mat-card>
-    <h1>Strategy: {{strategy?.metadata?.strategyName}}</h1>
+    <h1 style="display: inline;">Strategy: {{strategy?.metadata?.strategyName}}</h1>
+    <div id="user-button-wrapper">
+        <button 
+            mat-raised-button 
+            [routerLink]="'../'"
+        >
+        {{username === user.username ? 'View my strategies' : 'View ' + strategy?.username + "'s strategies"}}
+        
+        </button>
+    <button 
+        *ngIf="username !== user.username"
+        (click)="followOrUnfollow()" 
+        mat-raised-button>{{isFollowing ? 'Unfollow' : 'Follow'}} {{strategy?.username}} 
+        <mat-icon  [class.following] = "isFollowing" >favorite</mat-icon>
+    </button>
+    </div>
 </mat-card>
+
+<div id="strategy-definition-wrapper">
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    View Strategy Definition
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <span>Period: {{strategy.metadata.startDate | date}} - {{strategy.metadata.endDate | date}}</span>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+
 
 <mat-card class="statistic-card">
     <h2>Total Return</h2>
-    {{strategy?.result?.totalReturn | number}}
+    {{strategy?.result?.totalReturn | number: '1.2-2'}}%
 </mat-card>
 
 
 <mat-card class="statistic-card">
     <h2>CAGR</h2>
-    {{strategy?.result?.cagr | number}}
+    {{strategy?.result?.cagr | number: '1.2-2'}}%
 </mat-card>
 
 <mat-card class="statistic-card">
     <h2>Max Drawdown</h2>
-    {{strategy?.result?.maxDrawdown | number}}
+    {{strategy?.result?.maxDrawdown | number: '1.2-2'}}%
 </mat-card>
+
+<mat-card id="equity-card">
+    <h2>Equity Curve (100k start value)</h2>
+    <ngx-charts-line-chart
+        [view]="[1200,400]"
+        [results]="equityData"
+        [xAxisLabel]="'Days'"
+        [legendTitle]="'Equity Curve'"
+        [yAxisLabel]="'Equity'"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxis]="true"
+        [yAxis]="true"
+        [gradient]="true">
+    </ngx-charts-line-chart>
+</mat-card>
+   
 

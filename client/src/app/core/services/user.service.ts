@@ -16,4 +16,16 @@ export class UserService {
     return this.http.get<User[]>(this.baseUrl + '/users');
   }
 
+  followUser(username: string): Observable<Object> {
+    return this.http.put(`${this.baseUrl}/users/follow/${username}`, {})
+  }
+
+  unfollowUser(username: string): Observable<Object> {
+    return this.http.put(`${this.baseUrl}/users/unfollow/${username}`, {})
+  }
+
+  getFollowing(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/following`)
+  }
+
 }

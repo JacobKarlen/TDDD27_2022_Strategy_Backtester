@@ -1,6 +1,23 @@
-.statistic-card {
+.statistic-card:not(:last-child) {
     min-height: 50px;
-    width: 28%;
+    width: 29.5%;
     margin: 1.2% 1.2% 0 0;
     display: inline-block;
+}
+
+#strategy-definition-wrapper {
+    margin-top: 1.2%;
+}
+
+#equity-card {
+    margin-top: 1.2%;
+    height: 500px;
+}
+
+#user-button-wrapper {
+    float: right;
+}
+
+.following {
+    color: red;
 }

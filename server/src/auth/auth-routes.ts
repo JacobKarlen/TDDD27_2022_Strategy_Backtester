@@ -34,3 +34,7 @@ authRouter.delete('/logout', async (req: Request, res: Response) => {
     req.logOut()
     res.status(200).json({ message: "You have been logged out"})
 })
+
+authRouter.get('/loggedin/user', checkAuthenticated,  async (req: Request, res: Response) => {
+    res.status(200).json(req?.user)
+})
