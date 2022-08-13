@@ -1,3 +1,8 @@
 
-    <h1>{{username === user.username ? 'My Strategies' : username + "'s Strategies"}}</h1>
-    <strategy-card *ngFor="let strategy of strategies" [strategy]="strategy"></strategy-card>
+    <h1>
+        {{username === user.username ? 'My Strategies' : username + "'s Strategies"}}
+    </h1>
+    <strategy-card 
+        *ngFor="let strategy of strategies"
+        [strategy]="strategy">
+    </strategy-card>

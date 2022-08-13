@@ -20,6 +20,7 @@ export class StrategyCardComponent implements OnInit {
       let strategy = this.strategy;
     
       if (strategy.result !== null && strategy.result !== undefined) {
+        // adjust statistics to more presentable format
         const result: StrategyResult = strategy.result;
         result.totalReturn = (result.totalReturn -1) * 100;
         result.cagr = (result.cagr) * 100;

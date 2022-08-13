@@ -19,10 +19,6 @@ export class UserStrategiesPageComponent implements OnInit {
   user: User;
   username: string;
 
-  toppings = new FormControl('');
-
-  sortModes: string[] = ['Date', 'Total return', 'CAGR', 'Max Drawdown'];
-
   constructor(
     private strategyService: StrategyService, 
     private authService: AuthService,
@@ -31,13 +27,11 @@ export class UserStrategiesPageComponent implements OnInit {
 
   ngOnInit(): void {
     
-    let user: User = this.authService.getUserInfo()
-    this.user = user
+    this.user = this.authService.getUserInfo()
   
-    let username: string = this.activatedRoute.snapshot.paramMap.get("username") || "";
-    this.username = username
+    this.username = this.activatedRoute.snapshot.paramMap.get("username") || "";
 
-    this.strategyService.getUserStrategies(username).subscribe((strategies: Strategy[]) => {
+    this.strategyService.getUserStrategies(this.username).subscribe((strategies: Strategy[]) => {
       this.strategies = strategies
     })
 

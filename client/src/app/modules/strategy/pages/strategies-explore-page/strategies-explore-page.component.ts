@@ -9,7 +9,7 @@ import { Strategy } from 'src/app/shared/models/backtester';
 })
 export class StrategiesExplorePageComponent implements OnInit {
 
-  strategies: Strategy[];
+  strategies: Strategy[] = [];
 
   constructor(private strategyService: StrategyService) { }
 

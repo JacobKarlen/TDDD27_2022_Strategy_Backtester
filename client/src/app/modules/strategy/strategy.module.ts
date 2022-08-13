@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
-
 import { UserStrategiesPageComponent } from './pages/user-strategies-page/user-strategies-page.component';
 import { UserStrategyPageComponent } from './pages/user-strategy-page/user-strategy-page.component';
 

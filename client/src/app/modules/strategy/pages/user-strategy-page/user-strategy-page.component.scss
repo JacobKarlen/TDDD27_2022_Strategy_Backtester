@@ -21,3 +21,14 @@
 .following {
     color: red;
 }
+
+.status-started {
+    background-color: #fff3cd;
+}
+
+.status-finished {
+    background-color: #d4edda;  
+} 
+.status-failed {
+    background-color: #f8d7da; /* Red */
+}

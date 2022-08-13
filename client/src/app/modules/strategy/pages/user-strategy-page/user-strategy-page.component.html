@@ -1,20 +1,27 @@
 <mat-card>
-    <h1 style="display: inline;">Strategy: {{strategy?.metadata?.strategyName}}</h1>
+    <h1 style="display: inline;">
+        <b>Strategy:</b> {{strategy?.metadata?.strategyName}}
+    </h1>
     <div id="user-button-wrapper">
         <button 
             mat-raised-button 
-            [routerLink]="'../'"
-        >
-        {{username === user.username ? 'View my strategies' : 'View ' + strategy?.username + "'s strategies"}}
-        
+            [routerLink]="'../'">
+            {{username === user.username ? 'View my strategies' : 'View ' + strategy?.username + "'s strategies"}}
         </button>
-    <button 
-        *ngIf="username !== user.username"
-        (click)="followOrUnfollow()" 
-        mat-raised-button>{{isFollowing ? 'Unfollow' : 'Follow'}} {{strategy?.username}} 
-        <mat-icon  [class.following] = "isFollowing" >favorite</mat-icon>
-    </button>
+        <button 
+            *ngIf="username !== user.username"
+            (click)="followOrUnfollow()" 
+            mat-raised-button>{{isFollowing ? 'Unfollow' : 'Follow'}} {{strategy?.username}} 
+            <mat-icon [class.following] = "isFollowing" >favorite</mat-icon>
+        </button>
     </div>
+</mat-card>
+
+<mat-card style="margin-top: 1.2%;"
+    [class.status-finished]="strategy.status.status === 'finished'"
+    [class.status-started]="strategy.status.status === 'started'"
+    [class.status-failed]="strategy.status.status === 'failed'">
+    <h2><b>Status:</b> {{strategy.status.message}}</h2>
 </mat-card>
 
 <div id="strategy-definition-wrapper">
@@ -31,37 +38,38 @@
     </mat-accordion>
 </div>
 
+<div *ngIf="strategy.status.status === 'finished'">
+    <mat-card class="statistic-card">
+        <h2>Total Return</h2>
+        {{strategy?.result?.totalReturn | number: '1.2-2'}}%
+    </mat-card>
+    
+    <mat-card class="statistic-card">
+        <h2>CAGR</h2>
+        {{strategy?.result?.cagr | number: '1.2-2'}}%
+    </mat-card>
+    
+    <mat-card class="statistic-card">
+        <h2>Max Drawdown</h2>
+        {{strategy?.result?.maxDrawdown | number: '1.2-2'}}%
+    </mat-card>
+    
+    <mat-card id="equity-card">
+        <h2>Equity Curve (100k start value)</h2>
+        <ngx-charts-line-chart
+            [view]="[1200,400]"
+            [results]="equityData"
+            [xAxisLabel]="'Days'"
+            [legendTitle]="'Equity Curve'"
+            [yAxisLabel]="'Equity'"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+            [xAxis]="true"
+            [yAxis]="true"
+            [gradient]="true">
+        </ngx-charts-line-chart>
+    </mat-card>
+</div>
 
-<mat-card class="statistic-card">
-    <h2>Total Return</h2>
-    {{strategy?.result?.totalReturn | number: '1.2-2'}}%
-</mat-card>
-
-
-<mat-card class="statistic-card">
-    <h2>CAGR</h2>
-    {{strategy?.result?.cagr | number: '1.2-2'}}%
-</mat-card>
-
-<mat-card class="statistic-card">
-    <h2>Max Drawdown</h2>
-    {{strategy?.result?.maxDrawdown | number: '1.2-2'}}%
-</mat-card>
-
-<mat-card id="equity-card">
-    <h2>Equity Curve (100k start value)</h2>
-    <ngx-charts-line-chart
-        [view]="[1200,400]"
-        [results]="equityData"
-        [xAxisLabel]="'Days'"
-        [legendTitle]="'Equity Curve'"
-        [yAxisLabel]="'Equity'"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        [xAxis]="true"
-        [yAxis]="true"
-        [gradient]="true">
-    </ngx-charts-line-chart>
-</mat-card>
    
 

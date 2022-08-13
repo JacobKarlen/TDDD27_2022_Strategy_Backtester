@@ -30,21 +30,22 @@ export class UserStrategyPageComponent implements OnInit {
   ngOnInit(): void {
     
     this.user = this.authService.getUserInfo()
-    //let username = user? user.username : "explore"
 
     let username: string = this.activatedRoute.snapshot.paramMap.get('username') || '';
     let strategyName: string = this.activatedRoute.snapshot.paramMap.get('strategyName') || ''
     this.username = username
 
-    console.log(this.user)
     this.userService.getFollowing().subscribe(users => {
+      // Check if the user is following the user who created the strategy
       this.isFollowing = users.some(user => user.username === username)
     })
 
     this.strategyService.getStrategy(username, strategyName).subscribe((strategy: Strategy) => {
-      console.log(strategy)
-      this.strategy = strategy
-
+      /**
+       * Get strategy data and generate equity chart data and change statistic formats to more
+       * presentable percentage form.
+       */
+      
       if (strategy.result) {
         this.equityData = [{
           name: 'Portfolio',
@@ -58,11 +59,15 @@ export class UserStrategyPageComponent implements OnInit {
         strategy.result.totalReturn = (strategy.result.totalReturn-1) * 100
         strategy.result.cagr *= 100
       }
-     
+      this.strategy = strategy
     })
   }
 
   followOrUnfollow() {
+    /**
+     * Method to toggle the follow or unfollow of the user who created
+     * the strategy.
+     */
     if (this.isFollowing) {
       this.userService.unfollowUser(this.username).subscribe(res => {
         this.authService.getUpdatedUser().subscribe(user => {
@@ -78,4 +83,5 @@ export class UserStrategyPageComponent implements OnInit {
     }
     this.isFollowing =  !this.isFollowing
   }
+
 }
