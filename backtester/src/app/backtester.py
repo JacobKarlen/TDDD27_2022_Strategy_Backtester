@@ -339,18 +339,20 @@ def rebalance_portfolio(data, date, price_data, number_of_stocks):
 
                 ticker, open_quantity = df.iloc[0][['ticker', 'open_quantity']]
                 trade_date = get_next_trade_date(price_data, date, sid)
-                price = price_data.loc[
-                    (price_data.index == trade_date) &
-                    (price_data['ins_id'] == sid), 'open'][0]
-                
-                # Add a sell order for the next trade date
-                portfolio.pending_orders.put(
-                    OrderEvent(
-                        get_next_trade_date(price_data, date, sid), 
-                        sid, ticker, 'MKT', open_quantity, price,
-                        0, 'SELL', 'rebalance sell'
+              
+                if trade_date != False:
+                    price = price_data.loc[
+                        (price_data.index == trade_date) &
+                        (price_data['ins_id'] == sid), 'open'][0]
+                    
+                    # Add a sell order for the next trade date
+                    portfolio.pending_orders.put(
+                        OrderEvent(
+                            get_next_trade_date(price_data, date, sid), 
+                            sid, ticker, 'MKT', open_quantity, price,
+                            0, 'SELL', 'rebalance sell'
+                        )
                     )
-                )
     
     if not data.empty:
         # rebalance all positions in candidate list to target size
@@ -520,34 +522,36 @@ def run_backtest(md: StrategyMetadata):
             
             for filter in md.filters:
                 # apply each user-defined filter in a pipeline
-            
-                for ins_id, df in data.groupby('ins_id'):
-                    # set scope of kpis at rebalance date and calculate formula value for each instrument
-                    scope = {}
-                    for kpi in kpis_list:
-                        # delay kpi data with one year to avoid look-ahead bias
-                        if kpis_data.index.isin([pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1]]).any():
-                            scope[kpi['abbreviation']] = kpis_data.loc[pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1], 'v']
-                        else:
-                            scope[kpi['abbreviation']] = -1000
-                    mjs.update(scope)     
-    
-                    # Leverage mathjspy to evaluate the filter formulas the same way as in the front-end.
-                    data.loc[data.ins_id == ins_id, 'f_val'] = mjs.eval(filter['formula'])
                 
-                # filter out instruments based on filter criterias and update data ahead
-                # of next filter iteration to be applied
-                
-                data = data.where(
-                    (data['f_val'] >= filter['minFilterValue']) & 
-                    (data['f_val'] <= filter['maxFilterValue'])
-                ).dropna(how='all')
-                   
-                ascending = False if filter['selectionCriteria'] == 'highest' else True
-                data = data.sort_values(by=['f_val'], ascending=ascending)
-                data = data.iloc[:filter['numberOfStocks']]
-
-            rebalance_portfolio(data, date, price_data, filter['numberOfStocks'])
+                if isinstance(data, pd.DataFrame):
+                    for ins_id, df in data.groupby('ins_id'):
+                        # set scope of kpis at rebalance date and calculate formula value for each instrument
+                        scope = {}
+                        for kpi in kpis_list:
+                            # delay kpi data with one year to avoid look-ahead bias
+                            if kpis_data.index.isin([pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1]]).any():
+                                scope[kpi['abbreviation']] = kpis_data.loc[pd.IndexSlice[ins_id, kpi['kpiId'], date.year-1], 'v']
+                            else:
+                                scope[kpi['abbreviation']] = -1000
+                        mjs.update(scope)     
+        
+                        # Leverage mathjspy to evaluate the filter formulas the same way as in the front-end.
+                        data.loc[data.ins_id == ins_id, 'f_val'] = mjs.eval(filter['formula'])
+                    
+                    # filter out instruments based on filter criterias and update data ahead
+                    # of next filter iteration to be applied
+                    
+                    data = data.where(
+                        (data['f_val'] >= filter['minFilterValue']) & 
+                        (data['f_val'] <= filter['maxFilterValue'])
+                    ).dropna(how='all')
+                    
+                    ascending = False if filter['selectionCriteria'] == 'highest' else True
+                    data = data.sort_values(by=['f_val'], ascending=ascending)
+                    data = data.iloc[:filter['numberOfStocks']]
+                    
+            if isinstance(data, pd.DataFrame):
+                rebalance_portfolio(data, date, price_data, filter['numberOfStocks'])
         
         # Each trading date, execute any pending orders for the current date.
         execute_orders(date)
