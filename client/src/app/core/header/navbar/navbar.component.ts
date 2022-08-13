@@ -39,7 +39,7 @@ export class NavbarComponent {
 
     get username(): string {
       let user: User = this.authService.getUserInfo()
-      return user? user.username : "explore"
+      return user? user.username : ''
     }
 
 }

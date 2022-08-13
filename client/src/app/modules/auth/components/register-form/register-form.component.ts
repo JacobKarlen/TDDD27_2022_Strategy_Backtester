@@ -15,6 +15,7 @@ import { AlertService } from 'src/app/core/services/alert.service';
 export class RegisterFormComponent implements OnInit {
 
   checkPasswordsValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    // custom validator function to make sure passwords match
     let password = control.parent?.get('password')?.value
     let confirmPassword = control.parent?.get('confirm-password')?.value
 
@@ -51,6 +52,9 @@ export class RegisterFormComponent implements OnInit {
   }
 
   onSubmit(): void {
+    /**
+     * Submit the register form and attempt to register a user through the auth service
+     */
 
     this.authService.register(this.registerForm.value).subscribe((user: User) => {
       // successful registration
