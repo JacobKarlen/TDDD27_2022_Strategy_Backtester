@@ -6,6 +6,13 @@ import {AuthService} from './auth.service';
   providedIn: 'root'
 })
 export class AuthGuardService implements CanActivate {
+  /**
+   * Authentication Guard used to restrict access to routes
+   * if the user isn't authenticated and logged in.
+   * 
+   * @param authService 
+   * @param route 
+   */
 
   constructor(private authService : AuthService, private route : Router) { }
 
@@ -22,6 +29,13 @@ export class AuthGuardService implements CanActivate {
   providedIn: 'root'
 })
 export class LoggedInGuardSerivce implements CanActivate {
+  /**
+   * Guard service used to restrict access to routes if the
+   * user is already logged in. Used to restrict access to login/register pages.
+   * 
+   * @param authService 
+   * @param route 
+   */
 
   constructor(private authService : AuthService, private route : Router) { }
 

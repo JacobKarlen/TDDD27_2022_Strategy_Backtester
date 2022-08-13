@@ -19,6 +19,11 @@ export interface RegisterInformation {
   providedIn: 'root'
 })
 export class AuthService {
+  /**
+   * Authentication Service providing methods for all authentication
+   * tasks. Exposes methods for requesting auth-related backend routes and
+   * methods for caching user information in localstorage on the client.
+   */
 
   private baseUrl = 'http://localhost:8080/api';
 

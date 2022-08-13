@@ -8,6 +8,14 @@ import { User } from 'src/app/shared/models/user';
   providedIn: 'root'
 })
 export class BorsdataService {
+  /**
+   * Borsdata Service, providing methods for getting markets, countries
+   * sectors and branches from the express service for the backtester interface.
+   * 
+   * Instead of directly requesting the 3rd party Borsdata API, we make all requests
+   * through the express backend which implements an API wrapper. This way the API key
+   * is in safe hands...
+   */
 
   private baseUrl = 'http://localhost:8080/api/borsdata';
 

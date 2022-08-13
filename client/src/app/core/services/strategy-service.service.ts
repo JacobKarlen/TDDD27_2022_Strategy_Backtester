@@ -7,6 +7,10 @@ import { Strategy } from 'src/app/shared/models/backtester';
   providedIn: 'root'
 })
 export class StrategyService {
+  /**
+   * Strategy Service proving methods for doing all strategy-related
+   * requests to the express server for fetching strategies.
+   */
 
   private baseUrl = 'http://localhost:8080/api/strategies';
 

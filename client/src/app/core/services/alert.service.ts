@@ -6,6 +6,12 @@ import { Observable, Subject } from "rxjs";
   providedIn: 'root'
 })
 export class AlertService {
+    /**
+     * Alert Service used to make the success and error alerts
+     * pop up at the top of the page with custom messages to
+     * give the user feedback.
+     */
+
     private subject = new Subject<any>();
     private keepAfterNavigationChange = false;
 
