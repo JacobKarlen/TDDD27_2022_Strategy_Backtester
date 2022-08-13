@@ -8,8 +8,9 @@ import { Branch, Branches, Countries, Country, Market, Markets, Sector, Sectors 
 import { FilterListComponent } from '../filter-list/filter-list.component';
 import { FilterComponent } from '../filter/filter.component';
 
-import { StrategyMetadata } from 'src/app/shared/models/backtester';
+import { Strategy, StrategyMetadata } from 'src/app/shared/models/backtester';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-backtester-form',
@@ -51,10 +52,12 @@ export class BacktesterFormComponent implements OnInit {
     'branches': new FormControl([], [])
   })
 
-  constructor(private backtesterService: BacktesterService) { }
+  constructor(
+    private backtesterService: BacktesterService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    // refactor later
 
     this.backtesterForm.get('countries')?.valueChanges.subscribe((countries: Countries) => {
       // update market options based on selected countries
@@ -64,7 +67,7 @@ export class BacktesterFormComponent implements OnInit {
     })
 
     this.backtesterForm.get('sectors')?.valueChanges.subscribe((sectors: Sectors) => {
-
+      // update branches options based on selected sectors
       let sid = sectors.map((s: Sector) => s.id) 
       this.updateBranchesOptions(sid)
     })
@@ -98,14 +101,18 @@ export class BacktesterFormComponent implements OnInit {
   }
 
   updateMarketOptions(cid: number[]) {
-    // still not consistant
+    /**
+     * Used to update the grouped market options of the market select
+     * based on an array of country ids.
+     */
+
     let groups = this.countries.map((c: Country) => ({
       id: c.id, 
       name: c.name,
       options: [] as any,
       disabled: !cid.includes(c.id) as boolean
     }))
-    console.log(groups)
+ 
     this.markets.forEach((m: Market) => {
       groups[m.countryId-1].options.push({
         value: m,
@@ -114,9 +121,30 @@ export class BacktesterFormComponent implements OnInit {
     })
     this.marketGroups = groups
   }
+
+  updateBranchesOptions(sid: number[]) {
+    /**
+     * Used to update the grouped branch options of the branch select
+     * based on an array of sector ids.
+     */
+    let groups = this.sectors.map((s: Sector) => ({
+      id: s.id, 
+      name: s.name,
+      options: [] as any,
+      disabled: !sid.includes(s.id) as boolean
+    }))
+    
+    this.branches.forEach((b: Branch) => {
+      groups[b.sectorId-1].options.push({
+        value: b,
+        label: b.name
+      })
+    })
+    this.branchGroups = groups
+  }
   
   marketToggleAllSelection() {
-    // toggle all selection, activated with separate checkbox
+    // toggle all selection for the market select, activated with separate checkbox
     if (this.allMarketsSelected) {
       this.marketSelect.options.forEach((opt: MatOption) => {    
         if (!opt.disabled)  
@@ -128,7 +156,7 @@ export class BacktesterFormComponent implements OnInit {
   }
 
   marketOptionClicked() {
-    // update 'all selected'-status when an option is unselected
+    // update 'all selected'-status for the market select when an option is unselected
     let hasChanged = true;
     this.marketSelect.options.forEach((opt: MatOption) => {
       if (!opt.selected) {
@@ -137,27 +165,9 @@ export class BacktesterFormComponent implements OnInit {
     })
     this.allMarketsSelected = hasChanged
   }
-
-  updateBranchesOptions(sid: number[]) {
-    // still not consistant
-    let groups = this.sectors.map((s: Sector) => ({
-      id: s.id, 
-      name: s.name,
-      options: [] as any,
-      disabled: !sid.includes(s.id) as boolean
-    }))
-    console.log(groups)
-    this.branches.forEach((b: Branch) => {
-      groups[b.sectorId-1].options.push({
-        value: b,
-        label: b.name
-      })
-    })
-    this.branchGroups = groups
-  }
   
   branchesToggleAllSelection() {
-    // toggle all selection, activated with separate checkbox
+    // toggle all selection for the branch select, activated with separate checkbox
     if (this.allBranchesSelected) {
       this.branchesSelect.options.forEach((opt: MatOption) => {    
         if (!opt.disabled)  
@@ -169,7 +179,7 @@ export class BacktesterFormComponent implements OnInit {
   }
 
   branchOptionClicked() {
-    // update 'all selected'-status when an option is unselected
+    // update 'all selected'-status for the branch select when an option is unselected
     let hasChanged = true;
     this.branchesSelect.options.forEach((opt: MatOption) => {
       if (!opt.selected) {
@@ -193,15 +203,18 @@ export class BacktesterFormComponent implements OnInit {
       return formValues.filters['filter'+fn]
     })
     let strategyMetadata: StrategyMetadata = formValues;
-
-    console.log(strategyMetadata)
   
-    this.backtesterService.runBacktest(strategyMetadata).subscribe((res: any) => {
-      console.log(res)
+    this.backtesterService.runBacktest(strategyMetadata).subscribe((strategy: Strategy) => {
+      // start the strategy backtest and navigate to the new strategy page
+      this.router.navigate([`/${strategy.username}/strategies/${strategy.metadata.strategyName}`])
     })
   }
 
   printFormValues(): void {
+    /**
+     * Used for debugging purposes to control format of formValues
+     */
+
     let formValues = JSON.parse(JSON.stringify(this.backtesterForm.value)); // deep copy
     formValues.filters = this.filterOrder.map((fn: number) => {
       // correct for changed filter orders
@@ -211,7 +224,5 @@ export class BacktesterFormComponent implements OnInit {
     formValues.endDate = new Date(formValues.endDate) 
 
     let strategyMetadata: StrategyMetadata = formValues;
-
-    console.log(strategyMetadata)
   }
 }

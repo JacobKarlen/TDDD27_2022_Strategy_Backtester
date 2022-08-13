@@ -62,12 +62,23 @@
         
             <mat-select #marketSelect formControlName="markets" multiple>
                 <div class="select-all">
-                    <mat-checkbox [(ngModel)]="allMarketsSelected"
-                                    [ngModelOptions]="{standalone: true}"
-                                    (change)="marketToggleAllSelection()">Select All</mat-checkbox>
+                    <mat-checkbox 
+                        [(ngModel)]="allMarketsSelected"
+                        [ngModelOptions]="{standalone: true}"
+                        (change)="marketToggleAllSelection()">
+                        Select All
+                    </mat-checkbox>
                 </div>
-                <mat-optgroup *ngFor="let marketGroup of marketGroups" [disabled]="marketGroup.disabled" [label]="marketGroup.name">
-                    <mat-option (click)="marketOptionClicked()" *ngFor="let option of marketGroup.options" [value]="option.value">{{ option.label }}</mat-option>
+                <mat-optgroup 
+                    *ngFor="let marketGroup of marketGroups"
+                    [disabled]="marketGroup.disabled"
+                    [label]="marketGroup.name">
+                    <mat-option
+                        (click)="marketOptionClicked()"
+                        *ngFor="let option of marketGroup.options"
+                        [value]="option.value">
+                        {{ option.label }}
+                    </mat-option>
                 </mat-optgroup>
                 
             </mat-select>
@@ -90,12 +101,23 @@
         
             <mat-select #branchesSelect formControlName="branches" multiple>
                 <div class="select-all">
-                    <mat-checkbox [(ngModel)]="allBranchesSelected"
-                                    [ngModelOptions]="{standalone: true}"
-                                    (change)="branchesToggleAllSelection()">Select All</mat-checkbox>
+                    <mat-checkbox 
+                        [(ngModel)]="allBranchesSelected"
+                        [ngModelOptions]="{standalone: true}"
+                        (change)="branchesToggleAllSelection()">
+                        Select All
+                    </mat-checkbox>
                 </div>
-                <mat-optgroup *ngFor="let branchGroup of branchGroups" [disabled]="branchGroup.disabled" [label]="branchGroup.name">
-                    <mat-option (click)="branchOptionClicked()" *ngFor="let option of branchGroup.options" [value]="option.value">{{ option.label }}</mat-option>
+                <mat-optgroup 
+                    *ngFor="let branchGroup of branchGroups"
+                    [disabled]="branchGroup.disabled"
+                    [label]="branchGroup.name">
+                    <mat-option
+                        (click)="branchOptionClicked()"
+                        *ngFor="let option of branchGroup.options"
+                        [value]="option.value">
+                        {{ option.label }}
+                    </mat-option>
                 </mat-optgroup>
                 
             </mat-select>

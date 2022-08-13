@@ -26,10 +26,12 @@ export class FilterComponent implements OnInit {
     'RANK': function(val: number) {
       return val
     }
-  } 
+  }
 
   FormulaValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    // validate filter formula based on kpis and functions in scope
+    /**
+     * Custom validator function to validate filter formula based on kpis and functions in scope
+     */
     let formula = control.parent?.get('formula')?.value
     try {
       return this.math.evaluate(formula, this.scope) != NaN ? null : { formulaError: "invalid filter formula." }
@@ -41,8 +43,12 @@ export class FilterComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    // add kpi abbreviations to math scope
-    kpis.slice(0, 29).forEach((kpi: any) => { this.scope[kpi.abbreviation] = 10 })
+    /**
+    * add kpi abbreviations to math scope, value 10 is arbitrary
+    * since we won't evaluate anything more than that the formula is
+    * valid and therefore not a NaN.
+    */
+    kpis.forEach((kpi: any) => { this.scope[kpi.abbreviation] = 10 })
   }
 
   filterForm: FormGroup = new FormGroup({
@@ -69,9 +75,12 @@ export class FilterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((kpiAbbreviation: string) => {
       // add selected kpi shorthand to formula and give back focus
-      this.filterForm.get('formula')?.setValue(
-        this.filterForm.get('formula')?.value + kpiAbbreviation
-      )
+      if (kpiAbbreviation !== undefined) {
+        this.filterForm.get('formula')?.setValue(
+          this.filterForm.get('formula')?.value + kpiAbbreviation
+        )
+      }
+     
       document.getElementById('formula-input')?.focus()
     });
   }

@@ -13,19 +13,21 @@ import { KPI } from 'src/app/shared/models/borsdata';
 })
 export class KPISelectorModalComponent implements OnInit {
 
-  kpis: KPI[] = kpis.slice(0, 29) // only first 29 kpis currently have abbreviations
+  kpis: KPI[] = kpis
 
   searchGroup = new FormGroup({
     'search': new FormControl('', []),
   })
 
-  constructor(public dialogRef: MatDialogRef<KPISelectorModalComponent>) {}
+  constructor(
+    public dialogRef: MatDialogRef<KPISelectorModalComponent>
+  ) {}
 
   ngOnInit(): void {
     this.searchGroup.valueChanges.subscribe((control: any) => {
-      let term: string = control.search
+      let term: string = control.search.toLowerCase()
       this.kpis = kpis.filter((kpi: KPI) => {
-        return kpi.nameEn.includes(term) || kpi.abbreviation?.includes(term)
+        return kpi.nameEn.toLowerCase().includes(term) || kpi.abbreviation?.includes(term)
       })
     })
   }

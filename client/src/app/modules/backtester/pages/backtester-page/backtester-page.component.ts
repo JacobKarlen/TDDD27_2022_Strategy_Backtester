@@ -15,12 +15,9 @@ export class BacktesterPageComponent implements OnInit {
   branches: Branches = [];
 
 
-  constructor(private borsdataService: BorsdataService) {
-    this.markets = []
-  }
+  constructor(private borsdataService: BorsdataService) { }
 
   ngOnInit(): void {
-    //commented to avoid unnecessary requests
     this.borsdataService.getCountries().subscribe((countries: Countries) => {
       this.countries = countries
     })
