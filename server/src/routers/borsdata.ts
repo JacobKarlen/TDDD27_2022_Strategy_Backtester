@@ -24,7 +24,7 @@ export const getBorsdataData = async (path: string): Promise<any> => {
             res.on('end', () => { resolve(JSON.parse(data)) })
             
         }).on('error', (error: Error) => {
-            console.log("Error: ", error)
+            console.error(error)
             reject()
         })
     })
@@ -38,7 +38,7 @@ borsdataRouter.get('/borsdata/countries', async (req: Request, res: Response) =>
         let countries: Countries = data.countries
         res.status(200).json(countries)
     } catch (e) {
-        console.log('Error: ', e)
+        console.error(e)
         res.status(503).json({ "message": "error with 3rd party service"})
     }  
  })
@@ -49,7 +49,7 @@ borsdataRouter.get('/borsdata/markets', async (req: Request, res: Response) => {
         let markets: Markets = data.markets
         res.status(200).json(markets)
     } catch (e) {
-        console.log('Error: ', e)
+        console.error(e)
         res.status(503).json({ "message": "error with 3rd party service"})
     }  
 })
@@ -60,7 +60,7 @@ borsdataRouter.get('/borsdata/sectors', async (req: Request, res: Response) => {
         let sectors: Sectors = data.sectors
         res.status(200).json(sectors)
     } catch (e) {
-        console.log('Error: ', e)
+        console.error(e)
         res.status(503).json({ "message": "error with 3rd party service"})
     } 
  })
@@ -71,7 +71,7 @@ borsdataRouter.get('/borsdata/sectors', async (req: Request, res: Response) => {
         let branches: Branches = data.branches
         res.status(200).json(branches)
     } catch (e) {
-        console.log('Error: ', e)
+        console.error(e)
         res.status(503).json({ "message": "error with 3rd party service"})
     }  
  })

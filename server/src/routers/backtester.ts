@@ -28,29 +28,45 @@ export const getBacktestResult = async (metadata: StrategyMetadata, strategyId: 
             res.on('data', (chunk: string) => { 
                 data += chunk 
             })
-            res.on('end', () => { resolve(JSON.parse(data)) })
+            res.on('end', () => { 
+                try {
+                    resolve(JSON.parse(data)) 
+                } catch (e) {
+                    Strategy.updateOne({ _id: strategyId }, { $set: { status: {
+                        status: 'failed',
+                        message: 'The strategy backtest failed due to a server error.' 
+                    }}})
+                }
+                
+            })
             
-        }).on('error', (error: Error) => {
-            console.log("Error: ", error)
-            reject()
         })
+
         req.on('error', (error: Error) => {
             console.error(error)
+            Strategy.updateOne({ _id: strategyId }, { $set: { status: {
+                status: 'failed',
+                message: 'The strategy backtest failed due to a server error.' 
+            }}})
+            reject()
         })
+        
         req.write(JSON.stringify({ md: metadata, id: strategyId }))
         req.end()
-        console.log("in getBacktestResult")
     })
    
 }
 
 backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request, res: Response) => {
     let strategyMetadata: StrategyMetadata = req.body
-    // currently gets random backtest result generated from python api
 
     try {
         let strategy: IStrategy = {
             metadata: strategyMetadata,
+            status: {
+                status: 'started',
+                message: 'The strategy backtest is currently running, come back later for the results.',
+            },
             user: req.user?._id,
             username: req.user?.username || ""
         }
@@ -58,22 +74,26 @@ backtesterRouter.post('/backtester/run', checkAuthenticated, async (req: Request
         let savedStrategy = await (new Strategy(strategy)).save()
 
         getBacktestResult(strategyMetadata, savedStrategy._id).then(async (data) => {
+            // this part is async, and so the 
             try {
-                await Strategy.updateOne({ _id: data.strategyId }, { $set: { result: data.result }})
-                //res.status(200).json({ "message": "result successfully added to strategy"})
-                console.log("result successfully added to strategy")
+                await Strategy.updateOne({ _id: data.strategyId }, { $set: { result: data.result, status: {
+                    status: 'finished',
+                    message: 'The strategy backtest successfully finished.' 
+                }}})
             } catch (e) {
-                //res.send(503).json({ "error": "the result was not added to the specified strategy"})
-                console.error("the result was not added to the specified strategy")
+                await Strategy.updateOne({ _id: data.strategyId }, { $set: { status: {
+                    status: 'failed',
+                    message: 'The strategy backtest failed due to a server error.' 
+                }}})
+                console.error("Error; The result was not added to the specified strategy")
             }  
         })
 
-        console.log(savedStrategy)
         res.status(200).json(savedStrategy)
     
     } catch (e) {
-        console.log(e)
-        res.status(503).json({ "message": "error with python backtester"})
+        console.error(e)
+        res.status(503).json({ "message": "Error with python backtester. Failed to start backtest."})
     }  
    
 })
@@ -88,6 +108,5 @@ backtesterRouter.post('/backtester/results', async (req: Request, res: Response)
     } catch (e) {
         res.send(503).json({ "error": "the result was not added to the specified strategy"})
     }  
-    console.log("in results route successfully")
     
 })

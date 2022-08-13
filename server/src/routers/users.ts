@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 export const usersRouter = Router();
 
 usersRouter.put('/users/follow/:username', checkAuthenticated, async (req: Request, res: Response) => {
-    console.log("in function")
     let userId = req.user?._id
     let username = req.params.username
 
@@ -35,11 +34,10 @@ usersRouter.put('/users/follow/:username', checkAuthenticated, async (req: Reque
 usersRouter.put('/users/unfollow/:username', checkAuthenticated, async (req: Request, res: Response) => {
     let userId = req.user?._id
     let username = req.params.username
-    console.log("my id: " +userId)
     User.find({ username: username }, async (err: Error, users: HydratedDocument<IUser[]>) => {
         try {        
             let id = users[0]._id
-            console.log("followers id: " + id)
+
             if (userId != null && id.equals(userId)) {
                 return res.status(400).json({ 'error': 'you are not allowed to unfollow yourself'})
             } 
