@@ -6,8 +6,16 @@ import { User, IUser } from "../models/user";
 
 export const strategyRouter = Router();
 
-strategyRouter.get('/strategies/all', checkAuthenticated, (req: Request, res: Response) => {
-    Strategy.find({}, async (err: Error, strategies: HydratedDocument<IStrategy>) => {
+
+strategyRouter.get('/strategies/explore', checkAuthenticated, (req: Request, res: Response) => {
+    console.log(req.user?._id)
+    Strategy.find({ 'metadata.accessStatus': 'public', 'user': { $ne: req.user?._id}}, async (err: Error, strategies: HydratedDocument<IStrategy>) => {
+        res.json(strategies);
+    });
+})
+
+strategyRouter.get('/strategies/feed', checkAuthenticated, (req: Request, res: Response) => {
+    Strategy.find({ user: { $in: req.user?.following }}, async (err: Error, strategies: HydratedDocument<IStrategy>) => {
         res.json(strategies);
     });
 })

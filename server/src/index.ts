@@ -34,7 +34,8 @@ declare global {
 	namespace Express {
 	  interface User {
 		_id: mongoose.Schema.Types.ObjectId,
-		username: String
+		username: String,
+		following: mongoose.Schema.Types.ObjectId[],
 	  }
 	}
   }
@@ -66,7 +67,7 @@ app.use(session({
 	})
 }))
 
-// Strategy.deleteMany({}).then(res => console.log("strategy deletion successful"))
+//Strategy.deleteMany({}).then(res => console.log("strategy deletion successful"))
 
 app.use(passport.initialize())
 app.use(passport.session())

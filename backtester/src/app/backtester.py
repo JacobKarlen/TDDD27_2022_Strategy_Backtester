@@ -1,3 +1,4 @@
+from distutils.log import error
 import re
 import pytz
 import queue
@@ -7,6 +8,7 @@ import json
 import os
 import math
 import requests
+import json
 
 import functools as ft
 from datetime import datetime as dt
@@ -231,10 +233,13 @@ def get_pricedata_for_instruments(instruments, start, end):
     """
     dfs = []
     for instrument in instruments:
-        df = pd.read_csv(f"./pricedata/{instrument['insId']} {instrument['ticker']}.csv")
-        df['ticker'] = instrument['ticker']
-        df['ins_id'] = instrument['insId']
-        dfs.append(df)
+        try:
+            df = pd.read_csv(f"./pricedata/{instrument['insId']} {instrument['ticker']}.csv")
+            df['ticker'] = instrument['ticker']
+            df['ins_id'] = instrument['insId']
+            dfs.append(df)
+        except (Exception):
+            print(Exception)
     
     # combine each instrument df into one df with aligned dates as index
     df = pd.concat(dfs, axis=0)
@@ -463,10 +468,10 @@ def get_backtest_results(pf):
     wins = trs.where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
     losses = trs.where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
     
-    results['transactions'] = pf.transactions.to_json(orient='records')
-    results['executions'] = pf.executions.to_json(orient='records')
-    results['portfolioSnapshots'] = pf.portfolio_snapshots.to_json(orient='records')
-    results['positionSnapshots'] = pf.position_snapshots.to_json(orient='records')
+    results['transactions'] = json.loads(pf.transactions.to_json(orient='records'))
+    results['executions'] = json.loads(pf.executions.to_json(orient='records'))
+    results['portfolioSnapshots'] = json.loads(pf.portfolio_snapshots.to_json(orient='records'))
+    results['positionSnapshots'] = json.loads(pf.position_snapshots.to_json(orient='records'))
    
     # results['winRate'] = wins['avg_entry_price'].count() / pf.transactions['avg_entry_price'].count()
     # results['avgWin'] = ((wins.avg_exit_price - wins.avg_entry_price) / wins.avg_entry_price).mean()    

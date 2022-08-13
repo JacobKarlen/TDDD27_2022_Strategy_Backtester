@@ -1,0 +1,15 @@
+<mat-card class="strategy-card">
+    <span id="overview-statistics-span">
+        <div><b>Strategy name:</b> {{strategy.metadata.strategyName}} </div>
+        <div><b>Total return:</b> {{strategy?.result?.totalReturn  | number : '1.2-2'}}%</div>
+        <div><b>CAGR:</b> {{(strategy?.result?.cagr | number : '1.2-2')}}%</div>
+        <div><b>Max Drawdown:</b> {{(strategy?.result?.maxDrawdown | number : '1.2-2')}}%</div>
+    </span>
+    <button 
+        id="view-strategy-button" 
+        mat-raised-button color="primary"
+        [routerLink]="'/'+strategy.username+'/strategies/'+strategy.metadata.strategyName"
+    >
+    View Strategy
+    </button>
+</mat-card>

@@ -27,7 +27,7 @@ import { StrategyModule } from './modules/strategy/strategy.module';
     CoreModule,
     BacktesterModule,
     StrategyModule,
-    MatCardModule
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [ AppComponent ]

@@ -16,6 +16,14 @@ export class StrategyService {
     return this.http.get<Strategy[]>(this.baseUrl + '/all');
   }
 
+  getStrategiesFeed(): Observable<Strategy[]> {
+    return this.http.get<Strategy[]>(`${this.baseUrl}/feed`)
+  }
+
+  getStrategiesExplore(): Observable<Strategy[]> {
+    return this.http.get<Strategy[]>(`${this.baseUrl}/explore`)
+  }
+
   getMyStrategies(): Observable<Strategy[]> {
     return this.http.get<Strategy[]>(this.baseUrl + '/my')
   }

@@ -1,12 +1,3 @@
-<mat-card>
-    <h1>Strategies</h1>
-    <mat-card *ngFor="let strategy of strategies">
-        <span id="overview-statistics-span">
-            <div><b>Name:</b> {{strategy.metadata.strategyName}} </div>
-            <div><b>CAGR:</b> {{(strategy?.result?.cagr | number : '1.2-2')}}</div>
-            <div><b>Max Drawdown:</b> {{(strategy?.result?.maxDrawdown | number : '1.2-2')}}</div>
-        </span>
-        <button id="view-strategy-button" mat-raised-button color="primary" [routerLink]="'./'+strategy.metadata.strategyName">View Strategy</button>
 
-    </mat-card>
-</mat-card>
+    <h1>{{username === user.username ? 'My Strategies' : username + "'s Strategies"}}</h1>
+    <strategy-card *ngFor="let strategy of strategies" [strategy]="strategy"></strategy-card>

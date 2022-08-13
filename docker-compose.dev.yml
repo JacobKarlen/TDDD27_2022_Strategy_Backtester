@@ -9,6 +9,10 @@ services:
      - "9229:9229"
    volumes:
       - ./client/src:/usr/src/app/src
+   networks:
+    default:
+      aliases:
+        - backtrader.dev
  server: # name of the first service
     build: 
       context: ./server # specify the directory of the Dockerfile
