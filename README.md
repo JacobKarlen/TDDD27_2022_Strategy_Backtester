@@ -3,6 +3,10 @@
 ## Description
 Web application for backtesting stock strategies in the nordic stock markets and sharing strategies with other users.
 
+## Screencasts
+[Project Screencast (YT)](https://www.youtube.com/watch?v=35Il-kkOVsY)
+
+[Code Screencast (YT)](https://www.youtube.com/watch?v=VR8H3Fex6Sc)
 
 
 ## Specification
