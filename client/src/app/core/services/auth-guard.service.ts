@@ -28,7 +28,7 @@ export class AuthGuardService implements CanActivate {
 @Injectable({
   providedIn: 'root'
 })
-export class LoggedInGuardSerivce implements CanActivate {
+export class LoggedInGuardService implements CanActivate {
   /**
    * Guard service used to restrict access to routes if the
    * user is already logged in. Used to restrict access to login/register pages.

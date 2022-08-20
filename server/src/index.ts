@@ -44,8 +44,6 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config() // require syntax to more compactly import env variables
 }
 
-console.log(config.mongo.uri)
-
 // Connect to MongoDB database
 console.log('Connection to mongoDb on uri: ' + config.mongo.uri)
 mongoose.connect(config.mongo.uri, config.mongo.options)

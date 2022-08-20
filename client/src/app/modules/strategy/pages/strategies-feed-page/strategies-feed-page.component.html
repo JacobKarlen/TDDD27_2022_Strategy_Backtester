@@ -4,3 +4,7 @@
     *ngFor="let strategy of strategies"
     [strategy]="strategy">
 </strategy-card>
+<mat-card *ngIf="strategies.length === 0">
+    You currently don't follow anyone. Checkout the <a mat-list-item [routerLink]="'/strategies/explore'">Explore page</a>
+    and follow users to get a personalized feed.
+</mat-card>

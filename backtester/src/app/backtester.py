@@ -466,9 +466,10 @@ def get_backtest_results(pf):
     """
     
     results = {}
+    
     trs = pf.transactions.where(pf.transactions.open_quantity == 0).dropna(how='all')
-    wins = trs.where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
-    losses = trs.where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
+    wins = trs.where(trs.avg_exit_price != None).dropna(how='all').where((trs.open_quantity == 0) & (trs.avg_entry_price < trs.avg_exit_price)).dropna(how='all')
+    losses = trs.where(trs.avg_exit_price != None).dropna(how='all').where(trs.avg_entry_price >= trs.avg_exit_price).dropna(how='all')
     
     results['transactions'] = json.loads(pf.transactions.to_json(orient='records'))
     results['executions'] = json.loads(pf.executions.to_json(orient='records'))
